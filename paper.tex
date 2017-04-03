@@ -92,7 +92,7 @@
 
 % *** CITATION PACKAGES ***
 %
-%\usepackage{cite}
+\usepackage{cite}
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of the IEEE. Loading the cite package will
@@ -159,7 +159,7 @@
 
 % *** MATH PACKAGES ***
 %
-%\usepackage{amsmath}
+\usepackage{amsmath}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
 %
@@ -282,7 +282,7 @@
 % Instead, use Morten Hogholm'a dblfloatfix which combines the features
 % of both fixltx2e and stfloats:
 %
-% \usepackage{dblfloatfix}
+% dblfloatfix}
 % The latest version can be found at:
 % http://www.ctan.org/pkg/dblfloatfix
 
@@ -291,7 +291,7 @@
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 %
-%\usepackage{url}
+\usepackage{url}
 % url.sty was written by Donald Arseneau. It provides better support for
 % handling and breaking URLs. url.sty is already installed on most LaTeX
 % systems. The latest version and documentation can be obtained at:
@@ -355,7 +355,6 @@ christian.rohner@it.uu.se}
 \IEEEauthorblockA{Communication Research Group\\
 Uppsala University\\
 thiemo.voigt@it.uu.se}}
-
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -525,19 +524,41 @@ I wish you the best of success.
 \section{Bachground}
 
 \subsection{RTL2832U}
+\label{sub:rtl2832}
 
 \section{Design}
 
 \subsection{Sender}
 
 \subsection{Receiver}
-\begin{figure}[!t]
+\begin{figure}[h]
 \centering
-\includegraphics[width=2.5in]{fig/receiver_arch}
+\includegraphics[width=\columnwidth]{fig/receiver_arch}
 \caption{This figure shows the receiver architecture from an abstract point of view.}
-\label{fig_receiver_arch}
+\label{fig:receiver_arch}
 \end{figure}
-
+The receiver was the most work intensive part of the design. C++ has been used to implement the receiver. We provide the code publicly available under \url{https://github.com/s3xm3x/backscatterBASKReceiver}. In figure \ref{fig:receiver_arch} one can see the architecture of the receiver from an abstarct point of view. A highly sophisticated bus system has been developed to exchange data between the different components of the system. The signal flow is from the left to the right. \textit{Librtlsdr} (cf. \cite{github:librtlsdr}), which is based on \textit{libusb}, is used to transfer the data from the TV stick into our program. As described under \ref{sub:rtl2832}, the RTL2832 mixes down the high frequency to a intermediate frequency (both values are in SW adjustable). Subsequently the data is mixed with sine and cosine, low-pass filtered and finally transfered in the digital world. This data is available as two 8 Bit values. It is a well-known fact, that this technique, which is commonly known as I/Q demodulation, results in a real and an imagenery part. With this two values phase and absolute value of the data can be determined for every sample. So every sample consists out of a real and and imaginary part. And can be seen as:
+\begin{equation}
+	I+j\,Q = abs(I,Q) \cdot e^{ang(I,Q)} 
+\end{equation} 
+So the first block, which is entitled with RTL2832U, provides the interface to the TV dongle. This block is represented as one object. It can set the frequency \ensuremath{f_{tuned}}, where the receiver is listening. Also it can set the sampling frequency \ensuremath{f_{samp}} and the analog gain of the tuner. The raw samples are pushed to the bus. 
+Demodulator is the block called, which is responsible to convert the sampled signals into something, which looks like ones and zeroes. Thereforre the real and imgainary values first have to be deinterleaved out of the sample message. Now they are represented as integer values between 0 and 255 (8 bit). So one converts them to floats, whereas 127.5 equals 0. After that the values have to be downsampled. Usually we were sampling with 250 kHz. This is still much more than we need assuming an additive white gausian noise (AWGN) channel with a \ensuremath{S/N = 10\,dB} (cf. equation \ref{eq:awgn}). So we decided to reduce the sampling frequency to 25 kHz.
+\begin{equation}
+	\label{eq:awgn}
+	C=B \cdot log_2(1+\frac{S}{N})= 25\,kHz \cdot log_2(11) \approx 86.5\,kbit/s
+\end{equation}     
+To do this it is important to use an anti-aliasing filter, as the Shannon-Nyquist theorem has to be satisfied: 
+\begin{equation}
+	\label{eq:nyquist}
+	f_{sampling} > 2 \cdot f_{highestfregencyinsignal}
+\end{equation}
+A FIR filter naivly implemented with floats has been used to achieve this. 10 kHz is the cut-off frequency of the first filter. All filters have been constructed with the internal filter design tool of GNU radio. After downsampling another filter is used to suppress noise. This filter has a cut-off frequency of 3 kHz. The last demodulation step is to take the signal, rectify it (cf. equation \ref{eq:rectify}) and decide with a software-defined Schmitt trigger whether a sample is a 1 or a 0. 
+\begin{equation}
+	\label{eq:rectify}
+	abs(I,Q) = \sqrt{I^2 +  Q^2}
+\end{equation} 
+These samples are broadcasted on the bus. A registered listener receives the processed samples. This registered listener is the decoder, which is represented as an object as well. Thereupon the decoder decides when a frame is sent or when the channel is idle. On the basis of a defined threshold the decoder decides wether a certain sample pattern of ones and zeros is a 1 bit or a 0 bit. The baudrate value and the sampling rate value lead to a certain length of one bit. For example a sample rate \ensuremath{f_{sampling}} of 25 kHz combinded with a baudrate of 1 kbit/s lead to 25 samples/bit.   
+ 
 \section{Evaluation}
 
 \subsection{Signal Strength Variation within the City}
@@ -588,6 +609,10 @@ The authors would like to thank...
 \bibitem{IEEEhowto:kopka}
 H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
   0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+\bibitem{github:librtlsdr}
+Steve Markgraf et. al., \emph{librtlsdr}, \url{https://github.com/steve-m/librtlsdr}. Github: 2012-2017.
+
 
 \end{thebibliography}
 
