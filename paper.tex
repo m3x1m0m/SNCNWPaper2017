@@ -416,16 +416,10 @@ enables operations even in conditions when ambient signals are  weak in strength
 
 \section{Introduction}
 % no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success.
 
-\hfill mds
- 
-\hfill August 26, 2015
+\hfill April 7, 2017
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -521,11 +515,32 @@ I wish you the best of success.
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
-\section{Bachground}
+\section{Background}
 
 \subsection{RTL2832U}
 \label{sub:rtl2832}
-
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\columnwidth]{./fig/rtlsdr.jpg}
+\caption{This figure is a photo of the RTLSDR used in this project.}
+\label{fig:receiver_arch}
+\end{figure}
+The Raeltek RTL2832U is a terrestrial digital video broadcast (DVB-T) chip, which is the basis of a very low-cost software defined radio: The RTL-SDR. One feature of this chip is, that it supports USB 2.0. Ham radio enthusiasts combined their efforts to enable accessing the raw I/Q data. With their software driver (basically the \textit{librtlsdr}, cf. \cite{github:librtlsdr}) DVB-T sticks, which are based on the RTL2832, can be converted into a wideband SDR. This sort of hardware has been in the range of a few thousands USD a few years ago. An RTL2832U based DVB-T receiver can be bought with antenna for less than 10 USD. 
+What is a software defined radio? Traditionally basic radio components like mixers or filters have been realized in hardware. Nowadays as soon as one works in the baseband frequency the coputational resources of a personal computer are sufficient to realize these components with signal processing done in software.
+An RTL-SDR does not only consist of the RTL2832U. The second essential component is the tuner, which mixes down the radio frequency (RF) to a intermediate frequency (IF). In the case of the used hardware this tuner component was represented by a \textit{Rafael Micro R820T/2}. It subsumes a low-noise amplifier (LNA) and filters. The image frequency is rejected automatically with 65 dBc and the noise figure is with 3.5 dB quite low. It alows a frequency range from 42 to 1002 MHz (cf. \cite{rafael:r820t}). 
+The I/Q demodulator, also shown in figure \ref{fig:receiver_arch}, is the most important part of the \textit{RTL2832U} for our work. The received signal can be intepreted as
+\begin{equation}
+	s_{IF}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
+\end{equation}     
+This is multiplied with a cosine (and a sine as well) from a local oscillator.
+\begin{multline}
+        s_{IF}(t) \cdot s_L(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
+\end{multline}
+With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos(b)=sin(a+b)+sin(a-b)} follows
+\begin{multline}
+        2 \cdot s_{IF}(t) \cdot s_L(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
+\end{multline}
+One can see, that the interesting inphase part in this case is represented by a DC value after mixing. With a low-pass filter this DC value can be seperated from the undesired rest. Similar things are hapening with the quadrature part when mixing with a sine, which is indeed done to get the quadrature part.  
 \section{Design}
 
 \subsection{Sender}
@@ -533,7 +548,7 @@ I wish you the best of success.
 \subsection{Receiver}
 \begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{fig/receiver_arch}
+\includegraphics[width=\columnwidth]{./fig/receiver_arch}
 \caption{This figure shows the receiver architecture from an abstract point of view.}
 \label{fig:receiver_arch}
 \end{figure}
@@ -550,14 +565,16 @@ Demodulator is the block called, which is responsible to convert the sampled sig
 To do this it is important to use an anti-aliasing filter, as the Shannon-Nyquist theorem has to be satisfied: 
 \begin{equation}
 	\label{eq:nyquist}
-	f_{sampling} > 2 \cdot f_{highestfregencyinsignal}
+	f_{samp} \geq 2 \cdot f_{a}
 \end{equation}
+\ensuremath{f_{a}} is the highest frequency in the signal. 
 A FIR filter naivly implemented with floats has been used to achieve this. 10 kHz is the cut-off frequency of the first filter. All filters have been constructed with the internal filter design tool of GNU radio. After downsampling another filter is used to suppress noise. This filter has a cut-off frequency of 3 kHz. The last demodulation step is to take the signal, rectify it (cf. equation \ref{eq:rectify}) and decide with a software-defined Schmitt trigger whether a sample is a 1 or a 0. 
 \begin{equation}
 	\label{eq:rectify}
 	abs(I,Q) = \sqrt{I^2 +  Q^2}
 \end{equation} 
-These samples are broadcasted on the bus. A registered listener receives the processed samples. This registered listener is the decoder, which is represented as an object as well. Thereupon the decoder decides when a frame is sent or when the channel is idle. On the basis of a defined threshold the decoder decides wether a certain sample pattern of ones and zeros is a 1 bit or a 0 bit. The baudrate value and the sampling rate value lead to a certain length of one bit. For example a sample rate \ensuremath{f_{sampling}} of 25 kHz combinded with a baudrate of 1 kbit/s lead to 25 samples/bit.   
+These samples are broadcasted on the bus. A registered listener receives the processed samples. This registered listener is the decoder, which is represented as an object as well. After the decoder received the samples it decides when a frame is sent or when the channel is idle. On the basis of a defined threshold the decoder determines wether a certain sample pattern of ones and zeros is a 1 bit or a 0 bit. The baudrate and the sampling rate lead to a certain length of one bit. For example a sample rate \ensuremath{f_{sampling}} of 25 kHz combinded with a baudrate of 1 kbit/s leads to 25 samples/bit. The decoder also includes a function to correlate the received bitstream with an expected pattern. Hence it is able to determine the bit ro error ratio (BER). 
+Furthermore the code we have written so far subsumes a simulator to simulate ideal data coming out of the demodulator to test the algorithms behind the decoder. Also a simulator for the RTL2832U has been written to replay recorded samples, which facialiates debugging as well.    
  
 \section{Evaluation}
 
@@ -606,13 +623,11 @@ The authors would like to thank...
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-
 \bibitem{github:librtlsdr}
 Steve Markgraf et. al., \emph{librtlsdr}, \url{https://github.com/steve-m/librtlsdr}. Github: 2012-2017.
 
+\bibitem{rafael:r820t}
+\emph{High Performance Low Power Advanced Digital TV Silicon Tuner}. R820T. Rev 1.2. Rafael Micro. November 2011.
 
 \end{thebibliography}
 
