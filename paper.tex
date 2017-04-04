@@ -298,7 +298,8 @@
 % http://www.ctan.org/pkg/url
 % Basically, \url{my_url_here}.
 
-
+% For special characters like ä,ö,...
+\usepackage[utf8x]{inputenc}
 
 
 % *** Do not adjust lengths that control margins, column widths, etc. ***
@@ -544,6 +545,13 @@ One can see, that the interesting inphase part in this case is represented by a 
 \section{Design}
 
 \subsection{Sender}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\columnwidth]{./fig/s11}
+\caption{A plot of the input reflection coefficient or \ensuremath{S_{\text{11}}} is shown in this figure.}
+\label{fig:s11}
+\end{figure}
+A backscattering antenna is the most important part of backscattering sender. Our antenna is optimized for usage with the television signal, which has its center frequency at 626 MHz. It is a ground plane antenna, which has been built up on a big PCB. This PCB is covered with a copper layer on one side and left blank on the other. A hole in the midle of the PCB serves for connecting a thicker wire to a 50 \ensuremath{\Omega} microstrip transmission line. The wire is the vertical antenna element and is a bit longer than \ensuremath{\lambda/4 \approx \text{239.6 mm}}. It is soldered to the transmission line. The transmission line has been calculated for 626 MHz using FR4 substrate with a thickness of 1.6 mm. According to microstrip line theory the length of the line changes the phase and the width of the line changes the impedance (cf. chapter 3 in \cite{book:pozar}). The design equations given in \cite{books:pozar} are implemented in various programs e.g. KiCAD, which has been used for solving the design equations. The given parameters lead to a microstrip line width of 3 mm. An open-stub, attached directly at the puncture where the vertical antenna element is attached to the transmission line, is used for fine tuning of the input impedance. The stub length has been adjusted manually (shortened) while measuring the reflection coefficient with a vector network analyzer (VNA). Open-stub matching is discussed in chapter 5 in \cite{book:pozar}. Furthermore the resonance frequency has been tuned by cutting the vertical antenna element piece by piece while measuring with the VNA. At some point the \ensuremath{S_{\text{11}}} had the minimum quite close to where we wanted to have it (cf. \ref{fig:s11}). In the plot one can also see, that the antenna is quite narrowband. For backscattering this is not necessarily a disadvantage, since everything, which is within the operating frequency of the antenna is backscattered. So with a narrowband antenna the effect, that signals are backscattered, which are not targeted, is reduced. This statement has to be qualified as the antenna also has multiple resonance frequencies in multiple bands. With our approach we were able to achieve a input resistance at 634 MHz of \ensuremath{Z_{in}=(52.2 + j 4.3) \Omega}. At 626 MHz \ensuremath{S_{\text{11}}} is still approximately -17 dB.                   
 
 \subsection{Receiver}
 \begin{figure}[h]
@@ -575,7 +583,14 @@ A FIR filter naivly implemented with floats has been used to achieve this. 10 kH
 \end{equation} 
 These samples are broadcasted on the bus. A registered listener receives the processed samples. This registered listener is the decoder, which is represented as an object as well. After the decoder received the samples it decides when a frame is sent or when the channel is idle. On the basis of a defined threshold the decoder determines wether a certain sample pattern of ones and zeros is a 1 bit or a 0 bit. The baudrate and the sampling rate lead to a certain length of one bit. For example a sample rate \ensuremath{f_{sampling}} of 25 kHz combinded with a baudrate of 1 kbit/s leads to 25 samples/bit. The decoder also includes a function to correlate the received bitstream with an expected pattern. Hence it is able to determine the bit ro error ratio (BER). 
 Furthermore the code we have written so far subsumes a simulator to simulate ideal data coming out of the demodulator to test the algorithms behind the decoder. Also a simulator for the RTL2832U has been written to replay recorded samples, which facialiates debugging as well.    
- 
+Another handy utility, which has been written in Octave, is a tool (an oscilloscope) to look at the data, which is written into files by the demodulator. This utility has been captured in action, as can be seen in figure \ref{fig:osci}. 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{./fig/osci}
+\caption{A transmission of 101010... displayed with the Octave oscilloscope is shown in this figure.}
+\label{fig:osci}
+\end{figure}
+
 \section{Evaluation}
 
 \subsection{Signal Strength Variation within the City}
@@ -624,10 +639,13 @@ The authors would like to thank...
 \begin{thebibliography}{1}
 
 \bibitem{github:librtlsdr}
-Steve Markgraf et. al., \emph{librtlsdr}, \url{https://github.com/steve-m/librtlsdr}. Github: 2012-2017.
+Steve Markgraf et. al. \emph{librtlsdr}. \url{https://github.com/steve-m/librtlsdr}. Github: 2012-2017.
 
 \bibitem{rafael:r820t}
 \emph{High Performance Low Power Advanced Digital TV Silicon Tuner}. R820T. Rev 1.2. Rafael Micro. November 2011.
+
+\bibitem{book:pozar}
+D. M. Pozar. \emph{Microwave Engineering}. Fourth Edition. John Wiley \& Sons Inc. 111 River Street, Hoboken. 2012
 
 \end{thebibliography}
 
