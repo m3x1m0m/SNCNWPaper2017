@@ -523,7 +523,7 @@ enables operations even in conditions when ambient signals are  weak in strength
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\columnwidth]{./fig/rtlsdr.jpg}
-\caption{This figure is a photo of the RTLSDR used in this project.}
+\caption{\textit{RTL-SDR} hardware with the DVB-T I/Q demodulator \textit{Raeltek RTL2832U} (left IC) and the tuner with integrated LNA \textit{Rafael Micro R820T/2} (right IC).}
 \label{fig:receiver_arch}
 \end{figure}
 The Raeltek RTL2832U is a terrestrial digital video broadcast (DVB-T) chip, which is the basis of a very low-cost software defined radio: The RTL-SDR. One feature of this chip is, that it supports USB 2.0. Ham radio enthusiasts combined their efforts to enable accessing the raw I/Q data. With their software driver (basically the \textit{librtlsdr}, cf. \cite{github:librtlsdr}) DVB-T sticks, which are based on the RTL2832, can be converted into a wideband SDR. This sort of hardware has been in the range of a few thousands USD a few years ago. An RTL2832U based DVB-T receiver can be bought with antenna for less than 10 USD. 
@@ -544,20 +544,21 @@ With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos
 One can see, that the interesting inphase part in this case is represented by a DC value after mixing. With a low-pass filter this DC value can be seperated from the undesired rest. Similar things are hapening with the quadrature part when mixing with a sine, which is indeed done to get the quadrature part.  
 \section{Design}
 
-\subsection{Sender}
+\subsection{Transmitter}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.6\columnwidth]{./fig/s11}
-\caption{A plot of the input reflection coefficient or \ensuremath{S_{\text{11}}} is shown in this figure.}
+\includegraphics[width=0.8\columnwidth]{./fig/s11v2}
+\caption{Input reflection coefficient \ensuremath{\Gamma_{in}} also known as \ensuremath{S_{\text{11}}} of the selfmade backsacttering ground plane antenna in dB.}
 \label{fig:s11}
 \end{figure}
-A backscattering antenna is the most important part of backscattering sender. Our antenna is optimized for usage with the television signal, which has its center frequency at 626 MHz. It is a ground plane antenna, which has been built up on a big PCB. This PCB is covered with a copper layer on one side and left blank on the other. A hole in the midle of the PCB serves for connecting a thicker wire to a 50 \ensuremath{\Omega} microstrip transmission line. The wire is the vertical antenna element and is a bit longer than \ensuremath{\lambda/4 \approx \text{239.6 mm}}. It is soldered to the transmission line. The transmission line has been calculated for 626 MHz using FR4 substrate with a thickness of 1.6 mm. According to microstrip line theory the length of the line changes the phase and the width of the line changes the impedance (cf. chapter 3 in \cite{book:pozar}). The design equations given in \cite{books:pozar} are implemented in various programs e.g. KiCAD, which has been used for solving the design equations. The given parameters lead to a microstrip line width of 3 mm. An open-stub, attached directly at the puncture where the vertical antenna element is attached to the transmission line, is used for fine tuning of the input impedance. The stub length has been adjusted manually (shortened) while measuring the reflection coefficient with a vector network analyzer (VNA). Open-stub matching is discussed in chapter 5 in \cite{book:pozar}. Furthermore the resonance frequency has been tuned by cutting the vertical antenna element piece by piece while measuring with the VNA. At some point the \ensuremath{S_{\text{11}}} had the minimum quite close to where we wanted to have it (cf. \ref{fig:s11}). In the plot one can also see, that the antenna is quite narrowband. For backscattering this is not necessarily a disadvantage, since everything, which is within the operating frequency of the antenna is backscattered. So with a narrowband antenna the effect, that signals are backscattered, which are not targeted, is reduced. This statement has to be qualified as the antenna also has multiple resonance frequencies in multiple bands. With our approach we were able to achieve a input resistance at 634 MHz of \ensuremath{Z_{in}=(52.2 + j 4.3) \Omega}. At 626 MHz \ensuremath{S_{\text{11}}} is still approximately -17 dB.                   
+A backscattering antenna is the most important part of backscattering sender. Our antenna is optimized for usage with the television signal, which has its center frequency at 626 MHz. It is a ground plane antenna, which has been built up on a big PCB. This rectangular PCB, with dimensions of 200 mm x 300 mm, is covered with a copper layer on one side and left blank on the other. A hole in the midle of the PCB serves for connecting a thicker wire to a 50 \ensuremath{\Omega} microstrip transmission line. The wire is the vertical antenna element has a length of 350 mm, which is roughly 0.73 \ensuremath{\lambda}. It is soldered to the transmission line. The transmission line has been calculated for 626 MHz using FR4 substrate with a thickness of 1.6 mm. According to microstrip line theory the length of the line changes the phase and the width of the line changes the impedance (cf. chapter 3 in \cite{book:pozar}). The design equations given in \cite{books:pozar} are implemented in various programs e.g. KiCAD, which has been used for solving the design equations. The given parameters lead to a microstrip line width of 3 mm. An open-stub, attached directly at the puncture where the vertical antenna element is attached to the transmission line, is used for fine tuning of the input impedance. The stub length has been adjusted manually (shortened) while measuring the reflection coefficient with a vector network analyzer (VNA). Open-stub matching is discussed in chapter 5 in \cite{book:pozar}. Furthermore the resonance frequency has been tuned by cutting the vertical antenna element piece by piece while measuring with the VNA. At some point the \ensuremath{S_{\text{11}}} had the minimum quite close to where we wanted to have it (cf. \ref{fig:s11}). In the plot one can also see, that the antenna is quite narrowband. For backscattering this is not necessarily a disadvantage, since everything, which is within the operating frequency of the antenna is backscattered. So with a narrowband antenna the effect, that signals are backscattered, which are not targeted, is reduced. This statement has to be qualified as the antenna also has multiple resonance frequencies in multiple bands. With our approach we were able to achieve a input resistance at 634 MHz of \ensuremath{Z_{in}=(52.2 + j 4.3) \Omega}. At 626 MHz \ensuremath{S_{\text{11}}} is still approximately -17 dB.                   
+Besides the antenna the transmitter consists out of a \textit{MSP430}, which acts as subscriber, that sends data to the receiver. This transmitter is connected with one I/O pin and ground to a rf switch. The switch can change between matched (50 \ensuremath{\Omega}) and open. The software now steers this switch with a two 2 MHz rectangular timer signal for a 1 and is just leavs it open for a 0. Therefore the result is a shift of the television signal by 2 MHz for a 1 and no shift for a 0. Hence a classical binary amplitude shift keying is the implemented modulation technique.    
 
 \subsection{Receiver}
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{./fig/receiver_arch}
-\caption{This figure shows the receiver architecture from an abstract point of view.}
+\caption{Receiver architecture from a system point of view. Sinal flow is from the left to the right.}
 \label{fig:receiver_arch}
 \end{figure}
 The receiver was the most work intensive part of the design. C++ has been used to implement the receiver. We provide the code publicly available under \url{https://github.com/s3xm3x/backscatterBASKReceiver}. In figure \ref{fig:receiver_arch} one can see the architecture of the receiver from an abstarct point of view. A highly sophisticated bus system has been developed to exchange data between the different components of the system. The signal flow is from the left to the right. \textit{Librtlsdr} (cf. \cite{github:librtlsdr}), which is based on \textit{libusb}, is used to transfer the data from the TV stick into our program. As described under \ref{sub:rtl2832}, the RTL2832 mixes down the high frequency to a intermediate frequency (both values are in SW adjustable). Subsequently the data is mixed with sine and cosine, low-pass filtered and finally transfered in the digital world. This data is available as two 8 Bit values. It is a well-known fact, that this technique, which is commonly known as I/Q demodulation, results in a real and an imagenery part. With this two values phase and absolute value of the data can be determined for every sample. So every sample consists out of a real and and imaginary part. And can be seen as:
@@ -583,17 +584,18 @@ A FIR filter naivly implemented with floats has been used to achieve this. 10 kH
 \end{equation} 
 These samples are broadcasted on the bus. A registered listener receives the processed samples. This registered listener is the decoder, which is represented as an object as well. After the decoder received the samples it decides when a frame is sent or when the channel is idle. On the basis of a defined threshold the decoder determines wether a certain sample pattern of ones and zeros is a 1 bit or a 0 bit. The baudrate and the sampling rate lead to a certain length of one bit. For example a sample rate \ensuremath{f_{sampling}} of 25 kHz combinded with a baudrate of 1 kbit/s leads to 25 samples/bit. The decoder also includes a function to correlate the received bitstream with an expected pattern. Hence it is able to determine the bit ro error ratio (BER). 
 Furthermore the code we have written so far subsumes a simulator to simulate ideal data coming out of the demodulator to test the algorithms behind the decoder. Also a simulator for the RTL2832U has been written to replay recorded samples, which facialiates debugging as well.    
-Another handy utility, which has been written in Octave, is a tool (an oscilloscope) to look at the data, which is written into files by the demodulator. This utility has been captured in action, as can be seen in figure \ref{fig:osci}. 
+Another handy utility, which has been written in Octave, is a tool (an oscilloscope) to look at the data, which is written into files by the demodulator. An example of a recorded data stream with 25 kS/s can be seen in figure \ref{fig:osci}. 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{./fig/osci}
-\caption{A transmission of 101010... displayed with the Octave oscilloscope is shown in this figure.}
-\label{fig:osci}
+\includegraphics[width=\columnwidth]{./fig/frame_and_idle}
+\caption{Transmission of 101010.. with 1 kbit/s and idle state. Data from the Octave oscilloscope. Amplitude is quite low with an average of 12 \% of the maximum, which is 127.5.}
+\label{fig:frame}
 \end{figure}
 
 \section{Evaluation}
 
 \subsection{Signal Strength Variation within the City}
+To observe the signal strength variation within the city the \textit{RTL-SDR} has been used as well. 
 
 \subsection{Signal Strength Variation over Time}
 
