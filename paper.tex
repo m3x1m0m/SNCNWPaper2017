@@ -312,6 +312,7 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+\newcommand{\cp}[1]{\footnote{{\bf Carlos: #1}}}
 
 \begin{document}
 %
@@ -338,24 +339,21 @@ Uppsala University\\
 elmar.vanrijnswou.9818@student.uu.se}
 \and
 \IEEEauthorblockN{Carlos Pérez-Penichet}
-\IEEEauthorblockA{Communication Research Group\\
-Uppsala University\\
+\IEEEauthorblockA{Uppsala University\\
 carlos.penichet@it.uu.se}
 \and
 \IEEEauthorblockN{Ambuj Varshney}
-\IEEEauthorblockA{Communication Research Group\\
-Uppsala University\\
+\IEEEauthorblockA{Uppsala University\\
 ambuj.varshney@it.uu.se}
 \and
 \IEEEauthorblockN{Christian Rohner}
-\IEEEauthorblockA{Communication Research Group\\
-Uppsala University\\
+\IEEEauthorblockA{Uppsala University\\
 christian.rohner@it.uu.se}
 \and
 \IEEEauthorblockN{Thiemo Voigt}
-\IEEEauthorblockA{Communication Research Group\\
-Uppsala University\\
-thiemo.voigt@it.uu.se}}
+\IEEEauthorblockA{Uppsala University\\
+and SICS Swedish ICT\\
+thiemo@sics.se}}
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -518,18 +516,32 @@ enables operations even in conditions when ambient signals are  weak in strength
 
 \section{Background}
 
+In this section we examine some background aspects that are essential to our
+work. \cp{Put a simple intro to each section so that they don't look empty
+before the first subsection.}
+
+\subsection{Software Defined Radio}
+Traditionally basic radio components like mixers or filters have been realized
+in hardware. Nowadays as soon as one works in the baseband frequency the
+computational resources of a personal computer are sufficient to realize these
+components with signal processing done in software. \cp{We need to expand on
+this introduction to SDR, assuming we need it and not just assume everyone
+knows what that is.}
+
 \subsection{RTL2832U}
 \label{sub:rtl2832}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\columnwidth]{./fig/rtlsdr.jpg}
-\caption{\textit{RTL-SDR} hardware with the DVB-T I/Q demodulator \textit{Raeltek RTL2832U} (left IC) and the tuner with integrated LNA \textit{Rafael Micro R820T/2} (right IC).}
+				\caption{\textit{RTL-SDR} hardware with the DVB-T I/Q demodulator \textit{Raeltek RTL2832U} (left IC) and the tuner with integrated LNA \textit{Rafael Micro R820T/2} (right IC).}
 \label{fig:receiver_arch}
 \end{figure}
-The Raeltek RTL2832U is a terrestrial digital video broadcast (DVB-T) chip, which is the basis of a very low-cost software defined radio: The RTL-SDR. One feature of this chip is, that it supports USB 2.0. Ham radio enthusiasts combined their efforts to enable accessing the raw I/Q data. With their software driver (basically the \textit{librtlsdr}, cf. \cite{steve-m_librtlsdr}) DVB-T sticks, which are based on the RTL2832, can be converted into a wideband SDR. This sort of hardware has been in the range of a few thousands USD a few years ago. An RTL2832U based DVB-T receiver can be bought with antenna for less than 10 USD. 
-What is a software defined radio? Traditionally basic radio components like mixers or filters have been realized in hardware. Nowadays as soon as one works in the baseband frequency the coputational resources of a personal computer are sufficient to realize these components with signal processing done in software.
-An RTL-SDR does not only consist of the RTL2832U. The second essential component is the tuner, which mixes down the radio frequency (RF) to a intermediate frequency (IF). In the case of the used hardware this tuner component was represented by a \textit{Rafael Micro R820T/2}. It subsumes a low-noise amplifier (LNA) and filters. The image frequency is rejected automatically with 65 dBc and the noise figure is with 3.5 dB quite low. It alows a frequency range from 42 to 1002 MHz (cf. \cite{rafael_r820t_2011}). 
-The I/Q demodulator, also shown in figure \ref{fig:receiver_arch}, is the most important part of the \textit{RTL2832U} for our work. The received signal can be intepreted as
+The Raeltek RTL2832U is a terrestrial digital video broadcast (DVB-T) demodulator IC, which is at the core of a wide range of USB-based DVB-T receiver dongles. One prominent feature of this chip is that it allows to retrieve the raw I/Q samples via USB. This is originally intended for the chip to work as a simple DAB/FM software receiver. Ham radio enthusiasts have combined their efforts to create a software driver (the \textit{librtlsdr}, cf. \cite{steve-m_librtlsdr}) that allows DVB-T dongles based on the RTL2832 to be converted into a low-cost wideband SDR receiver. The cost of traditional SDR's has been in the range of a few hundred to thousands of USD. Albeit much less powerful than the typical SDR, an RTL2832U-based DVB-T receiver can be bought with antenna for less than 10 USD.
+An RTL-SDR does not only consist of the RTL2832U. The second essential component is the tuner, which allows the user to select the received frequency and outputs that signal at an intermediate frequency (IF). The IF can then be fed into the demodulator for digitalization. In the case of the used hardware this tuner is a \textit{Rafael Micro R820T/2} which offers a tuning range from 42 to 1002 MHz~\cite{rafael_r820t_2011}. It subsumes a low-noise amplifier (LNA) and filters. It presents a low noise figure of 3.5 dB and features 65 dBc of image rejection. Figure \ref{fig:receiver_arch} \cp{We need a much better photo here.}, shows a photograph of the RTL-SDR used in our work. 
+
+\subsection{Quadrature Demodulation}
+
+The received signal can be interpreted as
 \begin{equation}
 	s_{IF}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
 \end{equation}     
@@ -541,7 +553,8 @@ With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos
 \begin{multline}
         2 \cdot s_{IF}(t) \cdot s_L(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
 \end{multline}
-One can see, that the interesting inphase part in this case is represented by a DC value after mixing. With a low-pass filter this DC value can be seperated from the undesired rest. Similar things are hapening with the quadrature part when mixing with a sine, which is indeed done to get the quadrature part.  
+One can see, that the interesting in-phase part (I) in this case is represented by a DC value after mixing. With a low-pass filter this DC value can be separated from the undesired rest. An analogous procedure is done with the quadrature part (Q) when mixing with a sine. \cp{We need to explain this more clearly and possibly more concisely.}
+
 \section{Design}
 
 \subsection{Transmitter}
