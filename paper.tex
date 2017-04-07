@@ -606,7 +606,7 @@ binary amplitude shift keying is the implemented modulation technique.
 \label{fig:receiver_arch}
 \end{figure}
 We provide our C++ receiver code publicly available under
-\url{https://github.com/s3xm3x/backscatterBASKReceiver}
+\cite{s3xm3x_backscatterBASKReceiver}
 %A highly
 %sophisticated bus system has been developed to exchange data between the
 %different components of the system. 
@@ -692,14 +692,13 @@ main tools we have employed for measurements.
 	\begin{minipage}{0.49\columnwidth}
 	\includegraphics[width=\columnwidth]{./fig/626mhz_filtered}
 	\end{minipage}
-	\caption{Spectrum of the TV signal. Left: Raw spectrum of the TV signal with \ensuremath{f_{\text{center}}=\text{626 Mhz}}. Left: Smoothed spectrum, normalized to maximum average measured in decibel with average shown as red line.}
+	\caption{Spectrum of the TV signal. Left: Raw spectrum of the TV signal with \ensuremath{f_{\text{center}}=\text{626 Mhz}}. Right: Smoothed spectrum, normalized to maximum average measured in decibel with average shown as red line.}
 	\label{fig:tv_record} 
 \end{figure}
 
 We have used the \textit{RTL-SDR} to observe the space variations of the
 signal strength. \textit{Octave} scripts have been written to aid in
-this purpose. These scripts are available online under
-\url{https://github.com/s3xm3x/RTLSDRspecAn}. The scripts perform a
+this purpose. These scripts are available under \cite{s3xm3x_RTLSDRSpecAn}. The scripts perform a
 frequency sweep through the desired band. The obtained samples are then
 transferred from the time domain to the frequency domain using a fast
 fourier transformation (FFT). 
