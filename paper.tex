@@ -715,7 +715,7 @@ During the scanning process the gain is set to 40.2 dB. To get the
 signal strength we simply take the average over a 10 MHz band around the
 center frequency of the desired TV signal. This approach can be
 justified by the fact, that DVB-T is specified up to 10 MHz bandwidth.
-And the local TV signal provider is to its own statements using DVB-T 2.
+And the local TV provider advertises to be transmitting DVB-T 2.
 The signal \ensuremath{|H|} is calculated as follows.  
 \begin{equation}
 	|H| = \Biggl| \sum_{n=0}^N FFT\biggl( \Re\{ s_{\text{band,n}}(t) \} \biggr) \Biggr|
@@ -725,7 +725,7 @@ the real values, which are received from the \textit{RTL-SDR}.
 \ensuremath{s_{\text{band,n}}(t)} is the signal in the time domain of one
 interval (one subband). There are as many samples taken in one band as needed
 for an FFT of size 2048. To finally get \ensuremath{|H_{tv,avg}|} one has to
-normalize everything and calculate the power. Before doing that a simple
+normalize everything and calculate the power. Before doing that, a simple
 smoothing algorithm (FIR) is applied on \ensuremath{|H|}.  
 \begin{equation}
 	|H_{\text{tv,avg}}| = 20 \cdot log (|H|) - 20 \cdot log(|H_0|)
@@ -754,19 +754,20 @@ signal in Uppsala.}
 
 \subsection{Communication Performance}
 We tested the communication with different data rates from 1 bit/s up to
-1 kbit/s. As one can see in figure \ref{fig:transmission} the signal
-strength is quite low after backscattering. So the problem appears, that
-not all bits of the A/D converter are used. Hence a lot of quantization
-noise is introduced. In other words more gain is needed. The
+1 kbit/s. As can be seen in Figure \ref{fig:transmission} the signal
+strength from the backscatter transmitter is rather low. This leads to a
+significant amount of quantization noise to appear. This situation can
+be improved by increasing the analog gain of the receiver. The
 transmission shown in figure \ref{fig:transmission} was carried out with
-the maximum gain of 50 dB, which is available with the in
-\ref{sub:rtl2832} decribed tuner. So we got to the limits of the
-\textit{RTL-SDR} at that point. We were able to achieve a range indoors
-with 1 bit/s of a couple of meteres, but when we use a higher bitrate we
-can only communicate over a range of a couple of decimeter and still
-have a bit error ratio of approximately 40 \%. The communiction
-experiment was also carried out outside closer to the tower. We could
-not figure out any improvements going closer to the tower.  
+the maximum gain (50 dB) available to our receiver. 
+
+With a data rate of 1 bit/s, we were able to achieve a range indoors
+of a couple of meters. With higher bitrates we
+can only communicate over a range of a few decimeters and the 
+bit error rate is still approximately 40 \%. The communication
+experiment was also carried out outside, close to the TV tower. We could
+not observe any improvements going closer to the tower.  
+
 \section{Discussion}
 We are aware of the fact, that our communication system has to be improved until it is able to be used in allday technology. Different backscattering antennas have to be tried out to find the one with the best results. The question is mainly to which frequency the antenna has to be tuned (e.g. to the center of the TV signal or more to the edge of it). Moreover the standard \textit{RTL-SDR} antenna including the coaxial cable are of quite low quality. The antenna is e.g. too short. Hence a custom antenna would be benificial at this point as well. Moreover some fine tuning can be made when it comes to the filter coefficients of the different filters. Finally the frame structure can be optimized to be able to correct errors (e.g. Hamming code). 
 
