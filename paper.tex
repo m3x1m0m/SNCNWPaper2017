@@ -521,15 +521,15 @@ work.
 
 The received signal can be interpreted as
 \begin{equation}
-	s_{IF}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
+	s_{\text{IF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
 \end{equation}     
 This is multiplied with a cosine (and a sine as well) from a local oscillator.
 \begin{multline}
-        s_{IF}(t) \cdot s_L(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
+        s_{\text{IF}}(t) \cdot s_\text{L}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
 \end{multline}
 With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos(b)=sin(a+b)+sin(a-b)} follows
 \begin{multline}
-        2 \cdot s_{IF}(t) \cdot s_L(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
+        2 \cdot s_{\text{IF}}(t) \cdot s_L(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
 \end{multline}
 One can see, that the interesting in-phase part (I) in this case is
 represented by a DC value after mixing. With a low-pass filter this DC
@@ -591,12 +591,38 @@ binary amplitude shift keying is the implemented modulation technique.
 \caption{Receiver architecture from a system point of view. Signal flow is from left to right.}
 \label{fig:receiver_arch}
 \end{figure}
-C++ has been used to implement the receiver. We provide the code publicly available under \url{https://github.com/s3xm3x/backscatterBASKReceiver}. In figure \ref{fig:receiver_arch} we show the architecture of the receiver from an abstract point of view. A highly sophisticated bus system has been developed to exchange data between the different components of the system. The signal flow is from the left to the right. \textit{Librtlsdr} (cf. \cite{steve-m_librtlsdr}), which is based on \textit{libusb}, is used to transfer the data from the TV stick into our program. As described in section~\ref{sub:rtl2832}, the RTL2832 mixes down the high frequency to a intermediate frequency (both values are software adjustable). Subsequently the data is mixed with sine and cosine, low-pass filtered and finally transferred to the digital domain. This data is available as two 8-bit values. It is a well-known fact, that this technique, which is commonly known as I/Q demodulation, results in a decomposition of the signal into in-phase and quadrature components which are generally represented as real and imaginary parts respectively. With this two values, the phase and absolute value of the data can be determined for every sample. And can be seen as:
+C++ has been used to implement the receiver. We provide the code
+publicly available under
+\url{https://github.com/s3xm3x/backscatterBASKReceiver}. A highly
+sophisticated bus system has been developed to exchange data between the
+different components of the system. The signal flow in figure
+\ref{fig:receiver_arch} is from the left to the right.
+\textit{Librtlsdr} (cf. \cite{steve-m_librtlsdr}), which is based on
+\textit{libusb}, is used to transfer the data from the TV stick into our
+program. As described in section~\ref{sub:rtl2832}, the RTL2832 mixes
+down the high frequency to a intermediate frequency (both values are
+software adjustable). Subsequently the data is mixed with sine and
+cosine, low-pass filtered and finally transferred to the digital domain.
+This data is available as two 8-bit values (real and imaginary). With
+this two values, the phase and absolute value of the data can be
+determined for every sample. It can be intepreted can be seen as:
 \begin{equation}
 	I+j\,Q = abs(I,Q) \cdot e^{j \times ang(I,Q)} 
-\end{equation} 
-So the first block, which is entitled RTL2832U, provides the interface to the TV dongle. This block is represented as one object. It can set the frequency \ensuremath{f_{tuned}}, where the receiver is listening. Also it can set the sampling frequency \ensuremath{f_{samp}} and the analog gain of the tuner. The raw samples are pushed to the bus. 
-The demodulator block is responsible for converting the sampled signals into ones and zeroes. Therefore the real and imaginary values first have to be deinterleaved out of the sample message. Now they are represented as integer values between 0 and 255 (8 bit). So one converts them to floats, whereas 127.5 equals 0. After that the values have to be downsampled. Usually we were sampling with 250 kHz. This is still much more than we need assuming an Additive White Gaussian Noise (AWGN) channel with a \ensuremath{S/N = 10\,dB} (cf. equation \ref{eq:awgn}). So we decided to reduce the sampling frequency to 25 kHz.
+\end{equation}  
+So the first block, which is entitled RTL2832U,
+provides the interface to the TV dongle. This block is represented as
+one object. It can set the frequency \ensuremath{f_{tuned}}, where the
+receiver is listening, besides other interesting parameters e.g. the
+analog gain.
+The demodulator block is responsible for converting the sampled signals
+into ones and zeroes. Therefore the real and imaginary values first have
+to be deinterleaved out of the sample message. Now they are represented
+as integer values between 0 and 255 (8 bit). So one converts them to
+floats, whereas 127.5 equals 0. After that the values have to be
+downsampled. Usually we were sampling with 250 kHz. This is still much
+more than we need assuming an Additive White Gaussian Noise (AWGN)
+channel with a \ensuremath{S/N = 10\,dB} (cf.  equation \ref{eq:awgn}).
+So we decided to reduce the sampling frequency to 25 kHz.
 \begin{equation}
 	\label{eq:awgn}
 	C=B \cdot log_2(1+\frac{S}{N})= 25\,kHz \cdot log_2(11) \approx 86.5\,kbit/s
@@ -606,16 +632,29 @@ To do this it is important to use an anti-aliasing filter, as the Shannon-Nyquis
 	\label{eq:nyquist}
 	f_{samp} \geq 2 \cdot f_{a}
 \end{equation}
-\ensuremath{f_{a}} is the highest frequency in the signal. 
-A FIR filter naively implemented with floats has been used to achieve this. 10 kHz is the cut-off frequency of the first filter. All filters have been constructed with the internal filter design tool of GNU radio. After downsampling another filter is used to suppress noise. This filter has a cut-off frequency of 3 kHz. The last demodulation step is to rectify the signal (cf. equation \ref{eq:rectify}) and decide with a software-defined Schmitt trigger whether a sample is a 1 or a 0.
+\ensuremath{f_{a}} is the highest frequency in the signal.  A FIR
+filter naively implemented with floats has been used to achieve this. 10
+kHz is the cut-off frequency of the first filter. After downsampling
+another filter is used to suppress noise. This filter has a cut-off
+frequency of 3 kHz. The last demodulation step is to rectify the signal
+(cf. equation \ref{eq:rectify}) and decide with a software-defined
+Schmitt trigger whether a sample is a 1 or a 0.  
 \begin{equation}
 	\label{eq:rectify}
 	abs(I,Q) = \sqrt{I^2 +  Q^2}
 \end{equation} 
-These samples are broadcast on the bus. A registered listener receives the processed samples. This registered listener is the decoder, which is represented as an object as well. After the decoder received the samples it decides when a frame is sent or when the channel is idle. On the basis of a defined threshold the decoder determines whether a certain sample pattern of ones and zeros is a 1 bit or a 0 bit. The baudrate and the sampling rate lead to a certain bit duration. For example a sample rate \ensuremath{f_{sampling}} of 25 kHz combined with a baudrate of 1 kbit/s leads to 25 samples/bit. The decoder also includes a function to correlate the received bitstream with an expected pattern. Hence it is able to determine the bit error ratio (BER). 
-Furthermore the code we have written so far subsumes a simulator to simulate ideal data coming out of the demodulator to test the algorithms behind the decoder. Also a simulator for the RTL2832U has been written to replay recorded samples, which facilitates debugging as well.    
-Another handy utility, which has been written in Octave, is a tool (an oscilloscope) to look at the data, which is written into files by the demodulator. An example of a recorded data stream with 25 kS/s can be seen in figure \ref{fig:transmission}. 
-\begin{figure}[h]
+These samples are broadcast on the bus. A registered listener receives
+the processed samples. This registered listener is the decoder, which is
+represented as an object as well. After the decoder received the samples
+it decides when a frame is sent or when the channel is idle.  The
+decoder also includes a function to correlate the received bitstream
+with an expected pattern. Hence it is able to determine the bit error
+ratio (BER). Furthermore the code we have written so far subsumes
+different simulators for e.g. playing back recoreded data. Another handy
+utility, which has been written in Octave, is a tool (an oscilloscope)
+to look at the data, which is written into files by the demodulator. An
+example of a recorded data stream with 25 kS/s can be seen in figure
+\ref{fig:transmission}.  \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{./fig/transmission}
 \caption{Start of a transmission of 101010.. with 1 kbit/s with idle state before. Data from the Octave oscilloscope. Amplitude is quite low with an average of 12 \% of the maximum, which is 127.5. This is due to a low signal strength.}
