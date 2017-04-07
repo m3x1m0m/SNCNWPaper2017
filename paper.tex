@@ -605,8 +605,12 @@ binary amplitude shift keying is the implemented modulation technique.
 \caption{Receiver architecture from a system point of view. Signal flow is from left to right.}
 \label{fig:receiver_arch}
 \end{figure}
-We provide our C++ receiver code publicly available under
-\cite{s3xm3x_backscatterBASKReceiver}
+The receiver consists of three main modules interconnected by a bus. The
+RTL-SDR block is in charge of collecting samples from the SDR-device. The
+demodulator turns the sampled signal into a streams of ones and zeroes.
+Finally, the Decoder block is in charge of detecting frames. We provide our C++
+receiver code publicly available under~\cite{s3xm3x_backscatterBASKReceiver}.
+
 %A highly
 %sophisticated bus system has been developed to exchange data between the
 %different components of the system. 
