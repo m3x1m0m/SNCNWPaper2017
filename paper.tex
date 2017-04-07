@@ -692,7 +692,7 @@ main tools we have employed for measurements.
 	\begin{minipage}{0.49\columnwidth}
 	\includegraphics[width=\columnwidth]{./fig/626mhz_filtered}
 	\end{minipage}
-	\caption{Spectrum of the TV signal. Right: Raw spectrum of the TV signal with \ensuremath{f_{\text{center}}=\text{626 Mhz}}. Left: Smoothed spectrum, normalized to maximum average measured in decibel with average shown as red line.}
+	\caption{Spectrum of the TV signal. Left: Raw spectrum of the TV signal with \ensuremath{f_{\text{center}}=\text{626 Mhz}}. Left: Smoothed spectrum, normalized to maximum average measured in decibel with average shown as red line.}
 	\label{fig:tv_record} 
 \end{figure}
 
@@ -770,23 +770,9 @@ experiment was also carried out outside, close to the TV tower. We could
 not observe any improvements going closer to the tower.  
 
 \section{Discussion}
-We are aware of the fact, that our communication system has to be improved until it is able to be used in allday technology. These are aspects, where fine tuning is necessary to enhance the performance:
-\begin{itemize}
-	\item Antennas: Different backscattering antennas have to be
-tried out to find the one with the best results. The question is mainly
-to which frequency the antenna has to be tuned (e.g. to the center of
-the TV signal or more to the edge of it). Moreover the standard
-\textit{RTL-SDR} antenna including the coaxial cable are of quite low
-quality. The antenna is e.g. too short. 
-	\item Receiver: Some fine tuning can be made when it comes to the filter coefficients of the different filters.
-	\item Frame: The frame structure can be optimized to be able to correct errors (e.g. Hamming code).  
-\end{itemize}   
-To come to a conclusion one can say, that we were able
-\begin{itemize}
-	\item to show, that spectrum scanning over a huge band with sweeping is possible using the \textit{RTL-SDR}.
-	\item to provide a heat map of TV signals in a mid-sized swedish city as well as the tools to create it.
-	\item to show for the first time, that backscatter communication is possible with the \textit{RTL-SDR}.
-\end{itemize}
+We are aware of the fact, that our communication system has to be improved until it is able to be used in allday technology. Different backscattering antennas have to be tried out to find the one with the best results. The question is mainly to which frequency the antenna has to be tuned (e.g. to the center of the TV signal or more to the edge of it). Moreover the standard \textit{RTL-SDR} antenna including the coaxial cable are of quite low quality. The antenna is e.g. too short. Hence a custom antenna would be benificial at this point as well. Moreover some fine tuning can be made when it comes to the filter coefficients of the different filters. Finally the frame structure can be optimized to be able to correct errors (e.g. Hamming code). 
+
+To come to a conclusion one can say, that we were able to show, that spectrum scanning over a huge band with sweeping is possible using the \textit{RTL-SDR}. Therupon we could provide a heat map of TV signals in a mid-sized swedish city as well as the tools to create it. And last but not least we have shown for the first time, that backscatter communication is possible with the \textit{RTL-SDR}.
 
 
 % conference papers do not normally have an appendix
