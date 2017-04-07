@@ -477,9 +477,7 @@ enables operations even in conditions when ambient signals are  weak in strength
 
 \section{Background}
 
-In this section we examine some background aspects that are essential to our
-work. \cp{Put a simple intro to each section so that they don't look empty
-before the first subsection.}
+
 
 \subsection{Software Defined Radio}
 Traditionally basic radio components like mixers or filters have been realized
@@ -613,9 +611,15 @@ individual scans together. One can see, the effects of this a little bit, when t
 where \ensuremath{|H_0|} is a normalization value measured at a certain
 point in space. 
 \begin{figure}[h]
-\centering
-\includegraphics[width=0.5\columnwidth]{./fig/haversine}
-\caption{Signal strength fading against distance relative to the spot where the maximum signal strength has been captured (TV towers). 474 MHz and 626 MHz belong to a tower in Uppsala, Vedyxa and 594 MHz belongs to a tower in Uppsala, Rickomberga. Distances have been calculated with the Haversine formula.}
+	\centering
+	\begin{minipage}{0.49\columnwidth}
+	\includegraphics[width=\columnwidth]{./fig/haversine}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.49\columnwidth}
+	\includegraphics[width=\columnwidth]{./fig/heatmap_626mhz}
+	\end{minipage}
+	\caption{Signal strength fading against distance relative to the spot where the maximum signal strength has been captured (TV towers). 474 MHz and 626 MHz belong to a tower in Uppsala, Vedyxa and 594 MHz belongs to a tower in Uppsala, Rickomberga. Distances have been calculated with the Haversine formula.}
 \label{fig:haversine}
 \end{figure}
 
