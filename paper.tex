@@ -553,30 +553,39 @@ is done with the quadrature part (Q) when mixing with a sine.
 
 \section{Design}
 
+In this section we describe the most important aspects of our design.
+
 \subsection{Transmitter}
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.6\columnwidth]{./fig/s11v2}
-\caption{Input reflection coefficient \ensuremath{\Gamma_{\text{in}}} also known as \ensuremath{S_{\text{11}}} of the self-made backscattering ground-plane antenna.}
-\label{fig:s11}
-\end{figure} 
-Our backscattering antenna is optimized for usage with the television signal,
-which has its center frequency at 626 MHz. It is a ground plane antenna, which
-has been built up on a large unetched PCB plate. A hole in the middle of the
-PCB serves for connecting a wire to a 50 \ensuremath{\Omega} micro strip
-transmission line. The wire, which acts as a vertical antenna element is
-soldered to the transmission line. The microstrip transmission line design
-equations given in \cite{pozar_microwave_2011} are implemented in various
-programs e.g.  KiCAD, which has been used for designing them. An open-stub,
-attached directly at the juncture where the vertical antenna element is
-attached to the transmission line, is used for fine tuning of the input
-impedance (cf. chapter 5 in \cite{pozar_microwave_2011}).  Accepting -15 dB as
-sufficient value for \ensuremath{S_{11}}, one can say, that the antenna works
-within a range from 626 MHz to 645 MHz. With our narrowband antenna the
-undesired backscattering of out-of-band signals is reduced. With our approach
-we were able to achieve an input impedance at 634 MHz of
-\ensuremath{Z_{\text{in}}=(52.2 + j 4.3) \Omega}. At 626 MHz
-\ensuremath{S_{\text{11}}} is still approximately -17 dB.
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=0.6\columnwidth]{./fig/s11v2}
+%\caption{Input reflection coefficient \ensuremath{\Gamma_{in}} also known as \ensuremath{S_{\text{11}}} of the self-made backscattering ground-plane antenna.}
+%\label{fig:s11}
+%\end{figure} 
+%A backscattering antenna is the most important part of our backscatter
+%transmitter. 
+Our backscatter transmitter is designed to be used with the television
+signal, which has its center frequency at 626 MHz. To that end, we build
+an
+antenna using an unetched PCB plate as the ground plane and a wire that acts
+as the vertical antenna element.% is soldered to the transmission line. The
+%transmission line has been calculated for 626 MHz using an FR4 substrate
+%with a thickness of 1.6 mm. The design equations given in
+%\cite{pozar_microwave_2011} are implemented in various programs e.g.
+%KiCAD, which has been used for solving the design equations. An
+%open-stub, attached directly at the juncture where the vertical antenna
+%element is attached to the transmission line, is used for fine tuning of
+%the input impedance (cf. chapter 5 in \cite{pozar_microwave_2011}).
+%Accepting -15 dB as sufficient value for \ensuremath{S_{11}}, one can
+%say, that the antenna works in a range from 626 MHz to 645 MHz. For
+%backscattering this small bandwidth is not necessarily a disadvantage,
+%since everything that is within the operating frequency of the antenna
+%is backscattered. With our narrowband antenna the undesired
+%backscattering of out-of-band signals is reduced.  With our approach we
+%were able to achieve an input impedance at 634 MHz of
+%\ensuremath{Z_{in}=(52.2 + j 4.3) \Omega}. At 626 MHz
+%\ensuremath{S_{\text{11}}} is still approximately -17 dB.
+This antenna works well in the range from 626 to 245 MHz. 
 
 Besides the antenna, the transmitter consists of an \textit{MSP430} MCU,
 that sends data to the receiver. This transmitter controls an RF switch
@@ -585,12 +594,7 @@ the antenna between matched (50 \ensuremath{\Omega}) and open. The
 software now steers this switch with a two 2 MHz rectangular timer
 signal to transmit a data 1 or it just leaves the antenna open to
 transmit a data 0. Therefore the result is a frequency shift of the
-television signal by 2 MHz for a 1 and no shift for a 0. This can be
-easily understood thinking about a simple cosine, which is shifted by
-another cosine: \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)}. Of
-course this example is simplified compared to the actual situation as
-the actual signal, which is used for shifting contains more than one
-frequency as well as the TV signal, which is shifted. Hence a classical
+television signal by 2 MHz for a 1 and no shift for a 0. Hence a classical
 binary amplitude shift keying is the implemented modulation technique.   
  
 \subsection{Receiver}
@@ -601,60 +605,77 @@ binary amplitude shift keying is the implemented modulation technique.
 \label{fig:receiver_arch}
 \end{figure}
 We provide our C++ receiver code publicly available under
-\url{https://github.com/s3xm3x/backscatterBASKReceiver}. A highly sophisticated
-bus system has been developed to exchange data between the different components
-of the system. The signal flow in figure \ref{fig:receiver_arch} is from the
-left to the right.  \textit{Librtlsdr} (cf. \cite{steve-m_librtlsdr}), which is
-based on \textit{libusb}, is used to transfer the data from the TV stick into
-our program. As described in section~\ref{sub:rtl2832}, the RTL2832 mixes down
-the high frequency to a intermediate frequency (both values are software
-adjustable). The sampled data is available as two 8-bit values (real and
-imaginary). With this two values, the phase and absolute value of the data can
-be determined for every sample. Every sample can be intepreted as:
+\url{https://github.com/s3xm3x/backscatterBASKReceiver}
+%A highly
+%sophisticated bus system has been developed to exchange data between the
+%different components of the system. 
+Figure
+\ref{fig:receiver_arch} shows the architecture of our receiver, the
+signal flows from the left to the right.
+%\textit{Librtlsdr} (cf. \cite{steve-m_librtlsdr}), which is based on
+%\textit{libusb}, is used to transfer the data from the TV stick into our
+%program. As described in section~\ref{sub:rtl2832}, the RTL2832 mixes
+%down the high frequency to a intermediate frequency (both values are
+%software adjustable). Subsequently the data is mixed with sine and
+%cosine, low-pass filtered and finally transferred to the digital domain.
+The raw I/Q data is available as two 8-bit values (real and imaginary)
+from the RTL-SDR. With
+these two values, the phase and magnitude of the data can be
+determined for every sample. The received signal can be represented as:
 \begin{equation}
 	I+j\,Q = abs(I,Q) \cdot e^{j \times ang(I,Q)} 
 \end{equation}  
-So the first block, which is entitled RTL2832U, provides the interface to the
-TV dongle. This block controls the frequency \ensuremath{f_{tuned}}, where the
-receiver is listening, besides other interesting parameters e.g. the analog
-gain.
+So the first block, entitled RTL2832U, provides the interface to the TV
+dongle. It can set the frequency \ensuremath{f_{tuned}}, where the
+receiver is listening, and the analog gain.
 
-The demodulator block is responsible for converting the sampled signals into
-ones and zeroes. Therefore the real and imaginary values first have to be
-deinterleaved out of the sample message. These 8 bit integers are converted
-into floats, whereas 127.5 equals 0. After that the values have to be
-downsampled. Usually we were sampling with 250 kHz. This is still much more
-than we need assuming an Additive White Gaussian Noise (AWGN) channel with a
-\ensuremath{S/N = 10\,dB} (cf.  equation \ref{eq:awgn}).  So we decided to
-reduce the sampling frequency to 25 kHz. 
-\begin{equation}
-	\label{eq:awgn}
-	C=B \cdot log_2(1+\frac{S}{N})= 25\,kHz \cdot log_2(11) \approx 86.5\,kbit/s
-\end{equation}     
-To do this it is important to use an anti-aliasing filter, as the Shannon-Nyquist theorem has to be satisfied: 
-\begin{equation}
-	\label{eq:nyquist}
-	f_{\text{samp}} \geq 2 \cdot f_{\text{a}}
-\end{equation}
-\ensuremath{f_{\text{a}}} is the highest frequency in the signal.  A FIR filter
-naively implemented with floats has been used to achieve this.  After
-downsampling another filter is used to suppress noise.  The last demodulation
-step is to rectify the signal (cf. equation \ref{eq:rectify}) and decide with a
+The demodulator block is responsible for converting the sampled signals
+into ones and zeroes. 
+%Therefore the real and imaginary values first have
+%to be deinterleaved out of the sample message. Now they are represented
+%as integer values between 0 and 255 (8 bit). So one converts them to
+%floats, whereas 127.5 equals 0. After that the values have to be
+%downsampled. Usually we were sampling with 250 kHz. This is still much
+%more than we need assuming an Additive White Gaussian Noise (AWGN)
+%channel with a \ensuremath{S/N = 10\,dB} (cf.  equation \ref{eq:awgn}).
+%So we decided to reduce the sampling frequency to 25 kHz.
+%\begin{equation}
+%	\label{eq:awgn}
+%	C=B \cdot log_2(1+\frac{S}{N})= 25\,kHz \cdot log_2(11) \approx 86.5\,kbit/s
+%\end{equation}     
+%To do this it is important to use an anti-aliasing filter, as the Shannon-Nyquist theorem has to be satisfied: 
+%\begin{equation}
+%	\label{eq:nyquist}
+%	f_{samp} \geq 2 \cdot f_{a}
+%\end{equation}
+%\ensuremath{f_{a}} is the highest frequency in the signal.  A FIR
+%filter naively implemented with floats has been used to achieve this. 10
+%kHz is the cut-off frequency of the first filter. After downsampling
+%another filter is used to suppress noise. This filter has a cut-off
+%frequency of 3 kHz. 
+As part of the demodulation process the signal is down-sampled and
+low-pass-filtered two times. The last demodulation step is to rectify
+the signal (cf. equation \ref{eq:rectify}) and decide with a
 software-defined Schmitt trigger whether a sample is a 1 or a 0.  
 \begin{equation}
 	\label{eq:rectify}
 	abs(I,Q) = \sqrt{I^2 +  Q^2}
 \end{equation} 
-A registered listener receives the processed samples, which are broadcasted by
-the demodulator. This registered listener is the decoder. After the decoder
-received the samples it decides when a frame is sent or when the channel is
-idle.  The decoder also includes a function to correlate the received bitstream
-with an expected pattern. Hence it is able to determine the bit error ratio
-(BER). Furthermore the code we have written so far subsumes different
-simulators for e.g. playing back recoreded data. Another handy utility, which
-has been written in Octave, is a tool (an oscilloscope) to look at the data,
-which is written into files by the demodulator (cf. figure \ref{fig:transmission}).
-\begin{figure}[h] 
+
+The resulting values are sent through the bus to the decoder. After the
+decoder received the samples it decides when a frame is sent or when the
+channel is idle.  
+The decoder also includes a function to correlate the
+received bitstream with an expected pattern. Hence it is able to
+determine the bit error ratio (BER). 
+Furthermore the code we have
+written so far subsumes different simulators for e.g. playing back
+recoreded data. Another handy utility, which has been written in Octave,
+is a tool (an oscilloscope) to look at the data, which is written into
+files by the demodulator. An example of a recorded data stream with 25
+kS/s can be seen in figure
+\ref{fig:transmission}.  
+\begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{./fig/transmission}
 \caption{Start of a transmission of 101010.. with 1 kbit/s with idle state before. Data from the Octave oscilloscope. Amplitude is quite low with an average of 12 \% of the maximum, which is 127.5. This is due to a low signal strength. Sampling frequency is 25 kHz.}
