@@ -542,11 +542,11 @@ The received signal can be interpreted as
 \end{equation}     
 This is multiplied with a cosine of the carrier frequency from a local oscillator.
 \begin{multline}
-        s_{\text{IF}}(t) \cdot s_\text{L}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
+        s_{\text{IF}}(t) \cdot s_{\text{L}}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
 \end{multline}
 With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos(b)=sin(a+b)+sin(a-b)} follows
 \begin{multline}
-        2 \cdot s_{\text{IF}}(t) \cdot s_L(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
+        2 \cdot s_{\text{IF}}(t) \cdot s_{\text{L}}(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
 \end{multline}
 One can see, that the interesting in-phase part (I) in this case is
 represented by a DC value after mixing. With a low-pass filter this DC
@@ -559,7 +559,7 @@ is done with the quadrature part (Q) when mixing with a sine.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.6\columnwidth]{./fig/s11v2}
-\caption{Input reflection coefficient \ensuremath{\Gamma_{in}} also known as \ensuremath{S_{\text{11}}} of the self-made backscattering ground-plane antenna.}
+\caption{Input reflection coefficient \ensuremath{\Gamma_{\text{in}}} also known as \ensuremath{S_{\text{11}}} of the self-made backscattering ground-plane antenna.}
 \label{fig:s11}
 \end{figure} 
 Our backscattering antenna is optimized for usage with the television signal,
@@ -577,7 +577,7 @@ sufficient value for \ensuremath{S_{11}}, one can say, that the antenna works
 within a range from 626 MHz to 645 MHz. With our narrowband antenna the
 undesired backscattering of out-of-band signals is reduced. With our approach
 we were able to achieve an input impedance at 634 MHz of
-\ensuremath{Z_{in}=(52.2 + j 4.3) \Omega}. At 626 MHz
+\ensuremath{Z_{\text{in}}=(52.2 + j 4.3) \Omega}. At 626 MHz
 \ensuremath{S_{\text{11}}} is still approximately -17 dB.
 
 Besides the antenna, the transmitter consists of an \textit{MSP430} MCU,
@@ -636,9 +636,9 @@ reduce the sampling frequency to 25 kHz.
 To do this it is important to use an anti-aliasing filter, as the Shannon-Nyquist theorem has to be satisfied: 
 \begin{equation}
 	\label{eq:nyquist}
-	f_{samp} \geq 2 \cdot f_{a}
+	f_{\text{samp}} \geq 2 \cdot f_{\text{a}}
 \end{equation}
-\ensuremath{f_{a}} is the highest frequency in the signal.  A FIR filter
+\ensuremath{f_{\text{a}}} is the highest frequency in the signal.  A FIR filter
 naively implemented with floats has been used to achieve this.  After
 downsampling another filter is used to suppress noise.  The last demodulation
 step is to rectify the signal (cf. equation \ref{eq:rectify}) and decide with a
