@@ -160,6 +160,7 @@
 % *** MATH PACKAGES ***
 %
 \usepackage{amsmath}
+\usepackage{amssymb}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
 %
@@ -607,9 +608,40 @@ Another handy utility, which has been written in Octave, is a tool (an oscillosc
 \end{figure}
 
 \section{Evaluation}
+The hard results, we collected so far are presented in this section. Of course the \textit{RTL-SDR} is the main tool combined with intelligent signal processing in \textit{Octave}. 
 
 \subsection{Signal Strength Variation within the City}
-To observe the signal strength variation within the city the \textit{RTL-SDR} has been used as well. 
+\begin{figure}[h]
+	\centering
+	\begin{minipage}{0.49\columnwidth}
+	\includegraphics[width=\columnwidth]{./fig/626mhz_raw}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.49\columnwidth}
+	\includegraphics[width=\columnwidth]{./fig/626mhz_filtered}
+	\end{minipage}
+	\caption{Visualization of the signal processing, which is done. Right: Raw TV signal with \ensuremath{f_{\text{center}}=\text{626 Mhz}}. Left: Smoothed signal, normalized to maximum average measured in decibel with average shown as red line.}
+	\label{fig:tv_record} 
+\end{figure}
+
+To observe the signal strength variation within the city the \textit{RTL-SDR} has been used as well. \textit{Octave} scripts have been written for this purpose. These scripts are available online as well under \url{https://github.com/s3xm3x/RTLSDRspecAn}. Basically the scripts perform a frequency sweep through the desired band. All samples are written into files. With another script these samples, which end up in one directory, can be transfered from the the time domain into the frequency domain. This is done using an FFT. The basic problem is, that the \textit{RTL-SDR} does not have the huge sampling frequency, which is required to look at the huge band (of e.g. 20 MHz). So the Nyquist-Shannon sampling theorem, which is explained also in \ref{sub:rtl2832}i, strikes again. The trick is, that we are no interested in real-time data. This allows us to only look at one part of the interesting band and sweep through everything within roughly two minutes.
+The sampling frequency used is 1.8 MHz. This results in a sampled band of 900 kHz. Hence the resulting 900 kHz bands are glued together (shifted in frequency). The negative frequncies of the FFT are not used at all. In this case they are not playing any role of improtance. The gain is tuned to 40.2 dB. To get the signal strength we simply take the average over a 10 MHz band arround the TV signal. This approach can be justified by the fact, that DVB-T is specified up to 10 MHz bandwidth. And the local TV signal provider is to its own statements using DVB-T 2. The signal \ensuremath{|H|} is calculated as follows.
+\begin{equation}
+	|H| = \Biggl| \sum_{n=0}^N FFT\bigl( \Re\{ s_{\text{band,n}}(t) \} \bigr) \Biggr|
+\end{equation}     
+In the equation above \ensuremath{N} is the number of smaller bands which are accumulated into a big picture. The FFT is only carried out over the real values, which are received from the \textit{RTL-SDR}. \ensuremath{s_{\text{band,n}}(t)} is the signal in the time domain of one band. There are as many samples taken in one band as needed for a FFT size of x. In our case we chose x to be 2048. No window is used when glueing the data together. One can see, the effects of this a little bit, when taking a closer look at the plotted data. Rising and falling edges at the beginning of each band are visible. To get \ensuremath{|H_{tv,avg}|} one has to normalize everything and convert calculate the power. Before doing that a simple smoothing algorithm (FIR) is applied on \ensuremath{|H|}.
+\begin{equation}
+	|H_{tv,avg}| = 20 \cdot log (|H|) - 20 \cdot log(|H_0|)
+\end{equation}   
+\ensuremath{|H_0|} is a defined value for normalization. This actually can be everything e.g. a signal with a defined power from a signal generator. In our case it is just the maximum value measured on a certain point. 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\columnwidth]{./fig/haversine}
+\caption{Signal strength fading against distance relative to the spot where the maximum signal strength has been captured (TV towers). 474 MHz and 626 MHz belong to a tower in Uppsala, Vedyxa and 594 MHz belongs to a tower in Uppsala, Rickomberga. Distances have been calculated with the Haversine formula.}
+\label{fig:haversine}
+\end{figure}
+
+
 
 \subsection{Signal Strength Variation over Time}
 
