@@ -585,7 +585,8 @@ as the vertical antenna element.% is soldered to the transmission line. The
 %were able to achieve an input impedance at 634 MHz of
 %\ensuremath{Z_{in}=(52.2 + j 4.3) \Omega}. At 626 MHz
 %\ensuremath{S_{\text{11}}} is still approximately -17 dB.
-This antenna works well in the range from 626 to 245 MHz. 
+This antenna works well in the range from 626 to 245 MHz, which has been
+measured with a vector network analyzer (VNA). 
 
 Besides the antenna, the transmitter consists of an \textit{MSP430} MCU,
 that sends data to the receiver. This transmitter controls an RF switch
@@ -609,8 +610,7 @@ We provide our C++ receiver code publicly available under
 %A highly
 %sophisticated bus system has been developed to exchange data between the
 %different components of the system. 
-Figure
-\ref{fig:receiver_arch} shows the architecture of our receiver, the
+Figure \ref{fig:receiver_arch} shows the architecture of our receiver, the
 signal flows from the left to the right.
 %\textit{Librtlsdr} (cf. \cite{steve-m_librtlsdr}), which is based on
 %\textit{libusb}, is used to transfer the data from the TV stick into our
@@ -618,16 +618,15 @@ signal flows from the left to the right.
 %down the high frequency to a intermediate frequency (both values are
 %software adjustable). Subsequently the data is mixed with sine and
 %cosine, low-pass filtered and finally transferred to the digital domain.
-The raw I/Q data is available as two 8-bit values (real and imaginary)
-from the RTL-SDR. With
-these two values, the phase and magnitude of the data can be
+The raw I/Q data is available as two 8-bit values (real and imaginary) from the
+RTL-SDR. With these two values, the phase and magnitude of the data can be
 determined for every sample. The received signal can be represented as:
 \begin{equation}
 	I+j\,Q = abs(I,Q) \cdot e^{j \times ang(I,Q)} 
 \end{equation}  
 So the first block, entitled RTL2832U, provides the interface to the TV
-dongle. It can set the frequency \ensuremath{f_{tuned}}, where the
-receiver is listening, and the analog gain.
+dongle. It controls the frequency \ensuremath{f_{tuned}}, where the
+receiver is listening as well as other interesting parameters e.g. the analog gain.
 
 The demodulator block is responsible for converting the sampled signals
 into ones and zeroes. 
@@ -662,19 +661,15 @@ software-defined Schmitt trigger whether a sample is a 1 or a 0.
 	abs(I,Q) = \sqrt{I^2 +  Q^2}
 \end{equation} 
 
-The resulting values are sent through the bus to the decoder. After the
-decoder received the samples it decides when a frame is sent or when the
-channel is idle.  
-The decoder also includes a function to correlate the
-received bitstream with an expected pattern. Hence it is able to
-determine the bit error ratio (BER). 
-Furthermore the code we have
-written so far subsumes different simulators for e.g. playing back
-recoreded data. Another handy utility, which has been written in Octave,
-is a tool (an oscilloscope) to look at the data, which is written into
-files by the demodulator. An example of a recorded data stream with 25
-kS/s can be seen in figure
-\ref{fig:transmission}.  
+The resulting values are sent through the bus to the decoder. After the decoder
+received the samples it decides when a frame is sent or when the channel is
+idle. The decoder also includes a function to correlate the received bitstream
+with an expected pattern. Hence it is able to determine the bit error ratio
+(BER). Furthermore the code we have written so far subsumes different
+simulators for e.g. playing back recoreded data. Another handy utility, which
+has been written in Octave, is a tool (an oscilloscope) to look at the data,
+which is written into files by the demodulator. An example of a recorded data
+stream with 25 kS/s can be seen in figure \ref{fig:transmission}.  
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{./fig/transmission}
