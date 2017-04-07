@@ -2,7 +2,7 @@ Backscatter enables wireless communication at orders of magnitude lower
 energy cost than traditional radios. A backscatter transmitter operates
 by either reflecting or absorbing existing wireless signals, which only
 incurrs in very low power consumption in the order of
-\SI{}{\micro\watt}s~\cite{liu_ambient_2013}. As a consequence backscatter
+micro-Watts~\cite{liu_ambient_2013}. As a consequence backscatter
 communication is emerging as the mechanism of choice to network
 battery-free devices.  Over the past few years significant progress has
 been made to make backscatter communication practical for Internet of
@@ -13,33 +13,34 @@ signals~\cite{liu_ambient_2013} instead, which does away with the need for
 dedicated infrastructure. 
 
 Recent ambient backscatter systems demonstrate tag-to-tag communication
-by leveraging TV signals both as a source of carrier and energy. For
-example, Liu et al. presents a proof-of-concept system that reflects
-ambient TV signals and enables tag-to-tag communication up to a few
-feet. Parks et al. further improve the communication range to tens of
-feet by using analog coding~\cite{parks_turbocharging_2014}.  While these
-systems can enable many applications, they are also restricted to
+by leveraging TV signals as a source of both carrier and energy. For
+example, Liu et al. present a proof-of-concept system that reflects
+ambient TV signals and enables tag-to-tag communication up to almost a
+meter. Parks et al. further improve the communication range to several
+meters by using analog coding~\cite{parks_turbocharging_2014}. While
+these systems can enable many applications, they are also restricted to
 operate only in environments where TV signals are fairly strong~(approx
 \SI{-30}{dBm}) due to the low sensitivity of the receiver used in these
 tags. On the other hand, TV signals are known to vary greatly in
-strength~\cite{wang_fm_2017} over space time making existing systems very
-restricted in their coverage.
+strength~\cite{wang_fm_2017} over space and time, making existing
+systems very restricted in their coverage.
 
 On the other hand, Software Defined Radios~(SDRs) are powerful devices
-that have significant processing abilities, and also offer relatively
-high receive sensitivity levels. The high sensitivity levels of the SDRs
-compared to the typical ambient backscatter receiver tag could
+that have significant processing abilities and offer relatively high
+receive sensitivity levels. The high sensitivity levels of the SDRs,
+compared to the typical ambient backscatter receiver tag, could
 significantly help improve the communication range and coverage when
 receiving ambient backscatter transmissions. More importantly, SDRs
-offer incomparable flexibility due to their hability to be reprogrammed.
-This flexibility offers the opportunity for ample experimentation which
+offer incomparable flexibility due to their ability to be reprogrammed.
+This flexibility offers the opportunity for ample experimentation, which
 is welcomed in this sort of emerging technology.
 
-In this paper we explore the following questions: Can we create an SDR
-based receiver for ambient backscatter transmissions? Can we leverage
-the relatively high sensitivity of such a receiver to improve range and
-coverage of ambient backscatter systems? Can we provide a flexible and
-low-cost experimentation platform for ambient backscatter research?
+In this paper we explore the following questions: Can we create an
+SDR-based receiver for ambient backscatter transmissions? Can we
+leverage the relatively high sensitivity of such a receiver to improve
+range and coverage of ambient backscatter systems? Can we provide a
+flexible and low-cost experimentation platform for ambient backscatter
+research?
 
 \fakepar{Contributions} The contributions of this work are twofold:
 \begin{itemize}
