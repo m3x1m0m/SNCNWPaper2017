@@ -477,7 +477,7 @@ enables operations even in conditions when ambient signals are  weak in strength
 
 \section{Background}
 
-
+In this background section we introduce the necessary knowledge about sofware defined radios and the used hardware, the \textit{RTL-SDR}.  
 
 \subsection{Software Defined Radio}
 Traditionally basic radio components like mixers or filters have been realized
@@ -488,15 +488,34 @@ this introduction to SDR, assuming we need it and not just assume everyone
 knows what that is.}
 
 \subsection{RTL2832U}
-\label{sub:rtl2832}
-\begin{figure}[h]
-\centering
+\label{sub:rtl2832} \begin{figure}[h] \centering
 \includegraphics[width=0.5\columnwidth]{./fig/rtlsdr.jpg}
-				\caption{\textit{RTL-SDR} hardware with the DVB-T I/Q demodulator \textit{Raeltek RTL2832U} (left IC) and the tuner with integrated LNA \textit{Rafael Micro R820T/2} (right IC).}
-\label{fig:receiver_arch}
+\caption{\textit{RTL-SDR} hardware with the DVB-T I/Q demodulator
+\textit{Raeltek RTL2832U} (left IC) and the tuner with integrated LNA
+\textit{Rafael Micro R820T/2} (right IC).} \label{fig:receiver_arch}
 \end{figure}
-The Raeltek RTL2832U is a terrestrial digital video broadcast (DVB-T) demodulator IC, which is at the core of a wide range of USB-based DVB-T receiver dongles. One prominent feature of this chip is that it allows to retrieve the raw I/Q samples via USB. This is originally intended for the chip to work as a simple DAB/FM software receiver. Ham radio enthusiasts have combined their efforts to create a software driver (the \textit{librtlsdr}, cf. \cite{steve-m_librtlsdr}) that allows DVB-T dongles based on the RTL2832 to be converted into a low-cost wideband SDR receiver. The cost of traditional SDR's has been in the range of a few hundred to thousands of USD. Albeit much less powerful than the typical SDR, an RTL2832U-based DVB-T receiver can be bought with antenna for less than 10 USD.
-An RTL-SDR does not only consist of the RTL2832U. The second essential component is the tuner, which allows the user to select the received frequency and outputs that signal at an intermediate frequency (IF). The IF can then be fed into the demodulator for digitalization. In the case of the used hardware this tuner is a \textit{Rafael Micro R820T/2} which offers a tuning range from 42 to 1002 MHz~\cite{rafael_r820t_2011}. It subsumes a low-noise amplifier (LNA) and filters. It presents a low noise figure of 3.5 dB and features 65 dBc of image rejection. Figure \ref{fig:receiver_arch} \cp{We need a much better photo here.}, shows a photograph of the RTL-SDR used in our work. 
+The \textit{Realtek RTL2832U} is a terrestrial digital video broadcast
+(DVB-T) demodulator IC, which is the main part of a wide range of
+USB-based DVB-T receiver dongles. One prominent feature of this chip is
+that it allows to retrieve the raw I/Q samples via USB. This is
+originally intended for the chip to work as a simple DAB/FM software
+receiver. Ham radio enthusiasts have combined their efforts to create a
+software driver (the \textit{librtlsdr}, cf. \cite{steve-m_librtlsdr})
+that allows DVB-T dongles based on the \textit{RTL2832} to be converted
+into low-cost wideband SDR receivers. The cost of traditional SDRs has
+been in the range of a few hundred to thousands of USD. Albeit much less
+powerful than a typical SDR, a \textit{RTL2832U}-based DVB-T receiver
+can be bought with antenna for less than 10 USD.  A RTL-SDR does not
+only consist of the \textit{RTL2832U}, but also a tuner. The tuner is an
+essential component, as it allows the user to select the received
+frequency and outputs that signal at an intermediate frequency (IF). The
+IF can then be fed into the demodulator for digitalization. In the case
+of the used hardware this tuner is a \textit{Rafael Micro R820T/2} which
+offers a tuning range from 42 to 1002 MHz~\cite{rafael_r820t_2011}. It
+subsumes a low-noise amplifier (LNA) and filters. It presents a low
+noise figure of 3.5 dB and features 65 dBc of image rejection. Figure
+\ref{fig:receiver_arch}, shows a photograph of the RTL-SDR used in our
+work. 
 
 \subsection{Quadrature Demodulation}
 
@@ -512,14 +531,17 @@ With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos
 \begin{multline}
         2 \cdot s_{IF}(t) \cdot s_L(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
 \end{multline}
-One can see, that the interesting in-phase part (I) in this case is represented by a DC value after mixing. With a low-pass filter this DC value can be separated from the undesired rest. An analogous procedure is done with the quadrature part (Q) when mixing with a sine. \cp{We need to explain this more clearly and possibly more concisely.}
+One can see, that the interesting in-phase part (I) in this case is
+represented by a DC value after mixing. With a low-pass filter this DC
+value can be separated from the undesired rest. An analogous procedure
+is done with the quadrature part (Q) when mixing with a sine.
 
 \section{Design}
 
 \subsection{Transmitter}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\columnwidth]{./fig/s11v2}
+\includegraphics[width=0.6\columnwidth]{./fig/s11v2}
 \caption{Input reflection coefficient \ensuremath{\Gamma_{in}} also known as \ensuremath{S_{\text{11}}} of the self-made backscattering ground-plane antenna.}
 \label{fig:s11}
 \end{figure}
