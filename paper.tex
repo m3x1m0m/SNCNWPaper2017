@@ -564,7 +564,7 @@ Another handy utility, which has been written in Octave, is a tool (an oscillosc
 \centering
 \includegraphics[width=\columnwidth]{./fig/transmission}
 \caption{Start of a transmission of 101010.. with 1 kbit/s with idle state before. Data from the Octave oscilloscope. Amplitude is quite low with an average of 12 \% of the maximum, which is 127.5. This is due to a low signal strength.}
-\label{fig:frame}
+\label{fig:transmission}
 \end{figure}
 
 \section{Evaluation}
@@ -624,8 +624,21 @@ point in space.
 \subsection{Signal Strength Variation over Time}
 
 \subsection{Communication Performance}
-The communication 
+We tested the communication with different data rates from 1 bit/s up to 1 kbit/s. As one can see in figure \ref{fig:transmission} the signal strength is really low after backscattering. This leads to the problem, that the signal has a really bad quality. This related to the fact, that not all bits of the A/D converter are used. Hence a lot of quantization noise is introduced. In other words more gain is needed. The transmission shown in figure \ref{fig:transmission} was carried out with the maximum gain of 50 dB, which is available with the in \ref{sub:rtl2832u} decribed tuner. So we got to the limits of the \textit{RTL-SDR} at that point. We were able to achieve a range indoors with 1 bit/s of a couple of meteres, but when we use a higher bitrate we can only communicate over a range of a couple of decimeter and still have a bit error ratio of approximately 40 \%. The communiction experiment was also carried out outside closer to the tower. We could not figure out any improvements going closer to the tower.  
 \section{Discussion}
+We are aware of the fact, that our communication system has to be improved until it is able to be used in allday technology. These are aspects, where fine tuning is necessary to enhance the performance:
+\begin{itemize}
+	\item Antennas: Different backscattering antennas have to be tried out to find the one with the best results. The question is mainly to which frequency the antenna has to be tuned (e.g. to the center of the TV signal or more to the edge of it). Moreover the standard \textit{RTL-SDR} antenna including the coaxial cable are of quite low quality. The antenna is e.g. to short. 
+	\item Receiver: Some fine tuning can be made when it comes to the filter coefficients of the different filters.
+	\item Frame: The frame structure can be optimized to be able to correct errors (e.g. Hamming code).  
+\end{itemize}   
+To come to a conclusion one can say, that we were able
+\begin{itemize}
+	\item to show, that spectrum scanning over a huge band with sweeping is possible using the \textit{RTL-SDR}.
+	\item to provide a heat map of tv signals in a mid-sized swedish city as well as the tools to create it.
+	\item to show for the first time, that backscatter communication is possible with the \textit{RTL-SDR}.
+\end{itemize}
+
 
 % conference papers do not normally have an appendix
 
