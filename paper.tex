@@ -490,22 +490,30 @@ Backscatter communication is attractive for energy-constrained devices
 
 \section{Background}
 
-In this background section we introduce the necessary knowledge about sofware defined radios and the used hardware, the \textit{RTL-SDR}.  
+In this section we introduce some necessary background related to our
+work. 
 
-\subsection{Software Defined Radio}
-Traditionally basic radio components like mixers or filters have been realized
-in hardware. Nowadays as soon as one works in the baseband frequency the
-computational resources of a personal computer are sufficient to realize these
-components with signal processing done in software. \cp{We need to expand on
-this introduction to SDR, assuming we need it and not just assume everyone
-knows what that is.}
+%\subsection{Software Defined Radio}
+%Traditionally basic radio components like mixers or filters have been realized
+%in hardware. Nowadays as soon as one works in the baseband frequency the
+%computational resources of a personal computer are sufficient to realize these
+%components with signal processing done in software. \cp{We need to expand on
+%this introduction to SDR, assuming we need it and not just assume everyone
+%knows what that is.}
+
+\subsection{Backscatter Transmissions}
+\input{backscatter}
 
 \subsection{RTL2832U}
-\label{sub:rtl2832} \begin{figure}[h] \centering
-\includegraphics[width=0.5\columnwidth]{./fig/rtlsdr.jpg}
-\caption{\textit{RTL-SDR} hardware with the DVB-T I/Q demodulator
-\textit{Raeltek RTL2832U} (left IC) and the tuner with integrated LNA
-\textit{Rafael Micro R820T/2} (right IC).} \label{fig:receiver_arch}
+\label{sub:rtl2832}
+
+\begin{figure}[h]
+				\centering
+				\includegraphics[width=0.5\columnwidth]{./fig/rtlsdr.jpg}
+				\caption{\textit{RTL-SDR} hardware with the DVB-T I/Q
+				demodulator \textit{Raeltek RTL2832U} (left IC) and the tuner
+				with integrated LNA \textit{Rafael Micro R820T/2} (right IC).} 
+				\label{fig:receiver_arch}
 \end{figure}
 The \textit{Realtek RTL2832U} is a terrestrial digital video broadcast
 (DVB-T) demodulator IC, which is the main part of a wide range of
@@ -518,17 +526,13 @@ that allows DVB-T dongles based on the \textit{RTL2832} to be converted
 into low-cost wideband SDR receivers. The cost of traditional SDRs has
 been in the range of a few hundred to thousands of USD. Albeit much less
 powerful than a typical SDR, a \textit{RTL2832U}-based DVB-T receiver
-can be bought with antenna for less than 10 USD.  A RTL-SDR does not
-only consist of the \textit{RTL2832U}, but also a tuner. The tuner is an
-essential component, as it allows the user to select the received
-frequency and outputs that signal at an intermediate frequency (IF). The
-IF can then be fed into the demodulator for digitalization. In the case
-of the used hardware this tuner is a \textit{Rafael Micro R820T/2} which
-offers a tuning range from 42 to 1002 MHz~\cite{rafael_r820t_2011}. It
-subsumes a low-noise amplifier (LNA) and filters. It presents a low
-noise figure of 3.5 dB and features 65 dBc of image rejection. Figure
-\ref{fig:receiver_arch}, shows a photograph of the RTL-SDR used in our
-work. 
+can be bought with antenna for less than 10 USD.  
+
+An RTL-SDR also contains a tuner that allows the user to select the
+received frequency.  In our case the tuner is a \textit{Rafael Micro
+R820T/2} which offers a tuning range from 42 to 1002
+MHz~\cite{rafael_r820t_2011}. Figure \ref{fig:receiver_arch}, shows a
+photograph of the RTL-SDR used in our work. 
 
 \subsection{Quadrature Demodulation}
 
@@ -536,7 +540,7 @@ The received signal can be interpreted as
 \begin{equation}
 	s_{\text{IF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
 \end{equation}     
-This is multiplied with a cosine (and a sine as well) from a local oscillator.
+This is multiplied with a cosine of the carrier frequency from a local oscillator.
 \begin{multline}
         s_{\text{IF}}(t) \cdot s_\text{L}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
 \end{multline}
