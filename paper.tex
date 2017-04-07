@@ -605,8 +605,12 @@ binary amplitude shift keying is the implemented modulation technique.
 \caption{Receiver architecture from a system point of view. Signal flow is from left to right.}
 \label{fig:receiver_arch}
 \end{figure}
-We provide our C++ receiver code publicly available under
-\cite{s3xm3x_backscatterBASKReceiver}
+The receiver consists of three main modules interconnected by a bus. The
+RTL-SDR block is in charge of collecting samples from the SDR-device. The
+demodulator turns the sampled signal into a streams of ones and zeroes.
+Finally, the Decoder block is in charge of detecting frames. We provide our C++
+receiver code publicly available under~\cite{s3xm3x_backscatterBASKReceiver}.
+
 %A highly
 %sophisticated bus system has been developed to exchange data between the
 %different components of the system. 
@@ -752,6 +756,8 @@ signal in Uppsala.}
 \label{fig:haversine}
 \end{figure}
 
+\balance
+
 \subsection{Communication Performance}
 We tested the communication with different data rates from 1 bit/s up to
 1 kbit/s. As can be seen in Figure \ref{fig:transmission} the signal
@@ -768,10 +774,24 @@ bit error rate is still approximately 40 \%. The communication
 experiment was also carried out outside, close to the TV tower. We could
 not observe any improvements going closer to the tower.  
 
-\section{Discussion}
-We are aware of the fact, that our communication system has to be improved until it is able to be used in allday technology. Different backscattering antennas have to be tried out to find the one with the best results. The question is mainly to which frequency the antenna has to be tuned (e.g. to the center of the TV signal or more to the edge of it). Moreover the standard \textit{RTL-SDR} antenna including the coaxial cable are of quite low quality. The antenna is e.g. too short. Hence a custom antenna would be benificial at this point as well. Moreover some fine tuning can be made when it comes to the filter coefficients of the different filters. Finally the frame structure can be optimized to be able to correct errors (e.g. Hamming code). 
 
-To come to a conclusion one can say, that we were able to show, that spectrum scanning over a huge band with sweeping is possible using the \textit{RTL-SDR}. Therupon we could provide a heat map of TV signals in a mid-sized swedish city as well as the tools to create it. And last but not least we have shown for the first time, that backscatter communication is possible with the \textit{RTL-SDR}.
+\section{Discussion}
+
+Our system still has a lot of room for improvement.  Different
+backscattering antennas could be tried to find the one with the best
+combination of gain, tuning frequency and bandwidth. Moreover the
+standard \textit{RTL-SDR} antenna and its coaxial cable are of low
+quality.  Hence a custom antenna would be beneficial. Furthermore some
+fine tuning can be made when it comes to the filter coefficients of the
+different filters in the demodulator chain. Finally  errors can be
+further reduced by using one of many available forward error correcting
+codes.
+
+To come to a conclusion one can say, that we were able to show, that
+spectrum scanning over a huge band with sweeping is possible using the
+\textit{RTL-SDR}.  This allowed us to perform a survey of the TV signal
+strength in the city. And finally we have shown for the first time, that
+backscatter communication is possible with the \textit{RTL-SDR}.
 
 
 % conference papers do not normally have an appendix
