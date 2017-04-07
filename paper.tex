@@ -690,13 +690,13 @@ frequency sweep through the desired band. The obtained samples are then
 transferred from the time domain to the frequency domain using a fast
 fourier transformation (FFT). 
 
-Because the RTL-SDR has a maximum (stable) sampling rate of 2.4 MSPs, we
-are limited to a maximum simultaneous acquisition band of 1.2 MHz. We
-are keep a safety margin to the maximum capabilities and sample the
-desired frequency band at 900 kHz intervals and stitch these bands
-together to form the overall frequency sweep. This approach is valid
-only because we are not interested in real-time data.  With this
-approach we are able to scan a 20 MHz band in roughly two minutes.
+Because the RTL-SDR has a maximum (stable) sampling rate of 2.4 MS/s, we are
+limited to a maximum simultaneous acquisition band of 1.2 MHz. We keep a safety
+margin to the maximum capabilities and sample the desired frequency band at 900
+kHz intervals and stitch these bands together to form the overall frequency
+sweep. This approach is valid only because we are not interested in real-time
+data.  With this approach we are able to scan a 20 MHz band in roughly 30
+seconds.
 
 During the scanning process the gain is set to 40.2 dB. To get the
 signal strength we simply take the average over a 10 MHz band around the
@@ -706,18 +706,21 @@ And the local TV signal provider is to its own statements using DVB-T 2.
 The signal \ensuremath{|H|} is calculated as follows.  
 \begin{equation}
 	|H| = \Biggl| \sum_{n=0}^N FFT\biggl( \Re\{ s_{\text{band,n}}(t) \} \biggr) \Biggr|
-\end{equation}     
-where \ensuremath{N} is the total number of intervals accumulated over
-the entire frequency sweep. The FFT
-is only carried out over the real values, which are received from the
-\textit{RTL-SDR}. \ensuremath{s_{\text{band,n}}(t)} is the signal in the
-time domain of one interval (one subband). There are as many samples taken in one band as
-needed for an FFT of size 2048. To finally get \ensuremath{|H_{tv,avg}|} one has to normalize everything and calculate the power. Before doing that a simple smoothing algorithm (FIR) is applied on \ensuremath{|H|}.
+\end{equation}     where \ensuremath{N} is the total number of intervals
+accumulated over the entire frequency sweep. The FFT is only carried out over
+the real values, which are received from the \textit{RTL-SDR}.
+\ensuremath{s_{\text{band,n}}(t)} is the signal in the time domain of one
+interval (one subband). There are as many samples taken in one band as needed
+for an FFT of size 2048. To finally get \ensuremath{|H_{tv,avg}|} one has to
+normalize everything and calculate the power. Before doing that a simple
+smoothing algorithm (FIR) is applied on \ensuremath{|H|}.  
 \begin{equation}
 	|H_{tv,avg}| = 20 \cdot log (|H|) - 20 \cdot log(|H_0|)
 \end{equation}   
-where \ensuremath{|H_0|} is a normalization value measured at a certain
-point in space. 
+where \ensuremath{|H_0|} is a normalization value measured at a certain point
+in space. The result of combining measured signal strength values with the
+haversine function to calculate the distance to the point where the maximum
+signal has been captured can be observed in figure \ref{fig:haversine}.
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{0.49\columnwidth}
