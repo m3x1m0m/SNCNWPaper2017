@@ -651,7 +651,7 @@ into ones and zeroes.
 %	\label{eq:nyquist}
 %	f_{samp} \geq 2 \cdot f_{a}
 %\end{equation}
-%\ensuremath{f_{a}} is the highest frequency in the signal.  A FIR
+%\ensuremath{f_{a}} is the highest frequency in the signal. A FIR
 %filter naively implemented with floats has been used to achieve this. 10
 %kHz is the cut-off frequency of the first filter. After downsampling
 %another filter is used to suppress noise. This filter has a cut-off
@@ -670,7 +670,7 @@ received the samples it decides when a frame is sent or when the channel is
 idle. The decoder also includes a function to correlate the received bitstream
 with an expected pattern. Hence it is able to determine the bit error ratio
 (BER). Furthermore the code we have written so far subsumes different
-simulators for e.g. playing back recoreded data. Another handy utility, which
+simulators for e.g. playing back recorded data. Another handy utility, which
 has been written in Octave, is a tool (an oscilloscope) to look at the data,
 which is written into files by the demodulator. An example of a recorded data
 stream with 25 kS/s can be seen in Figure \ref{fig:transmission}.  
