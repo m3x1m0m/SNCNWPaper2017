@@ -10,61 +10,10 @@
 \usepackage{caption}
 \usepackage{siunitx}
 \usepackage{booktabs}
-% Some Computer Society conferences also require the compsoc mode option,
-% but others use the standard conference format.
-%
-% If IEEEtran.cls has not been installed into the LaTeX system files,
-% manually specify the path to it like:
-% \documentclass[conference]{../sty/IEEEtran}
 
 
-
-
-
-% Some very useful LaTeX packages include:
-% (uncomment the ones you want to load)
-
-
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/pkg/ifpdf
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-
-
-
-
-
-% *** CITATION PACKAGES ***
-%
 \usepackage{cite}
-% cite.sty was written by Donald Arseneau
-% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
-% \cite{} output to follow that of the IEEE. Loading the cite package will
-% result in citation numbers being automatically sorted and properly
-% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
-% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
-% \cite will automatically add leading space, if needed. Use cite.sty's
-% noadjust option (cite.sty V3.8 and later) if you want to turn this off
-% such as if a citation ever needs to be enclosed in parenthesis.
-% cite.sty is already installed on most LaTeX systems. Be sure and use
-% version 5.0 (2009-03-20) and later if using hyperref.sty.
-% The latest version can be obtained at:
-% http://www.ctan.org/pkg/cite
-% The documentation is contained in the cite.sty file itself.
+
 
 
 
@@ -351,21 +300,9 @@ thiemo@sics.se}}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-Backscatter communication is attractive for energy-constrained devices
-				due to its very low power requirements. Ambient backscatter
-				takes this point to the limit by leveraging existing radio
-				frequency signals for the purpose of communication, without the
-				need for generating an energy-expensive carrier signal. In this
-				paper we investigate the use of television broadcast signals as
-				a carrier for backscatter communication. As opposed to the
-				state-of-the-art, restricted to operations under conditions of
-				high signal strength, we demonstrate a low-cost software defined
-				radio receiver that operates even in conditions when ambient
-				signals are weak. We build the system using a low-cost
-				off-the-shelf microcontroller and an RTLSDR software-defined
-				radio receiver. We also conduct a survey of the signal strength
-				of TV broadcast in a mid-sized Swedish city and observe that our
-				system can operate in most parts of the city.
+\input{abstract}
+
+
 \end{abstract}
 
 % no keywords
