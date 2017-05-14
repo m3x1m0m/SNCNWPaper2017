@@ -141,18 +141,26 @@ value can be separated from the undesired rest. An analogous procedure
 is done with the quadrature part (Q) when mixing with a sine.
 
 \section{Design}
-
-In this section we describe the most important aspects of our design.
+In this section, we describe the design 
+of our system. We first describe the
+design of the transmitter, next we describe 
+the design of the receiver.
 
 \subsection{Transmitter}
  
-Our backscatter transmitter is designed to be used with the television
-signal, which has its center frequency at 626 MHz. To that end, we build
-an
-antenna using an unetched PCB plate as the ground plane and a wire that acts
-as the vertical antenna element.
-This antenna works well in the range from 626 to 245 MHz, which has been
-measured with a vector network analyzer (VNA). 
+We design our backscatter transmitter to be used with ambient
+television signals.  We design the transmitter for ambient
+television signal present in the band with  
+center frequency of \SI{626}{\mega\hertz}. Crucial to the design
+of the transmitter is the implementation of an antenna, as
+the antennas are known to be  frequency selective. To this end, we design an
+antenna on an unetched board made of FR4 substrate commonly
+used to design PCBs. The board acts like the ground plane, at the center
+of the board we have a wire acting as a monopole antenna element. 
+We have verified using a vector network analyzer (VNA), that the antenna
+can operate from frequency range most commonly
+used for television broadcast, 
+from \SI{245}{\mega\hertz} to \SI{626}{\mega\hertz}.
 
 Besides the antenna, the transmitter consists of an \textit{MSP430} MCU,
 that sends data to the receiver. This transmitter controls an RF switch
@@ -168,9 +176,11 @@ binary amplitude shift keying is the implemented modulation technique.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{./fig/receiver_arch}
+\vspace{-6mm}
 \caption{\emph{Design of the ambient backscatter receiver.} The flow of operation of the
 receiver is from the left to right.}
 \label{fig:receiver_arch}
+\vspace{-6mm}
 \end{figure}
 The receiver consists of three main modules interconnected by a bus. The
 RTL-SDR block is in charge of collecting samples from the SDR-device. The
@@ -219,11 +229,17 @@ simulators for e.g. playing back recorded data. Another handy utility, which
 has been written in Octave, is a tool (an oscilloscope) to look at the data,
 which is written into files by the demodulator. An example of a recorded data
 stream with 25 kS/s can be seen in Figure \ref{fig:transmission}.  
+
+
 \begin{figure}[h]
 \centering
+\vspace{-30mm}
+
 \includegraphics[width=\columnwidth]{./fig/transmission}
+\vspace{-30mm}
 \caption{Start of a transmission of 101010.. with 1 kbit/s with idle state before. Data from the Octave oscilloscope. Amplitude is quite low with an average of 12 \% of the maximum, which is 127.5. This is due to a low signal strength. Sampling frequency is 25 kHz.}
 \label{fig:transmission}
+\vspace{-6mm}
 \end{figure}
 
 \section{Evaluation}
@@ -249,7 +265,7 @@ backscatter communication is possible with the \textit{RTL-SDR}.
 
 
 
-\bibliographystyle{IEEEtran}
+\bibliographystyle{abbrv}
 \bibliography{paper}
 
 \end{document}
