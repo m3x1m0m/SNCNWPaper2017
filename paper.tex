@@ -162,14 +162,19 @@ can operate from frequency range most commonly
 used for television broadcast, 
 from \SI{245}{\mega\hertz} to \SI{626}{\mega\hertz}.
 
-Besides the antenna, the transmitter consists of an \textit{MSP430} MCU,
-that sends data to the receiver. This transmitter controls an RF switch
-through an I/O pin. The switch can alternate the impedance connected to
-the antenna between matched (50 \ensuremath{\Omega}) and open. The
-software now steers this switch with a two 2 MHz rectangular timer
-signal to transmit a data 1 or it just leaves the antenna open to
-transmit a data 0. Therefore the result is a frequency shift of the
-television signal by 2 MHz for a 1 and no shift for a 0. Hence a classical
+Backscatter operates by reflecting or absorbing impinging
+radio signals on the antenna. To purposefully toggle the antenna
+to achieve these states, we  terminate the antenna to a 
+RF switch. The RF switch enables us to alternate the impedance connected to
+the antenna between matched (50 \ensuremath{\Omega}) and open state.
+We control the RF switch through an I/O pin on a low-powered MCU, Texas
+instruments MSP430. As discussed earlier, to reduce the effects of
+self-interference, we frequency shift the backscatter transmission
+away from the TV signal. Hence, we operate the RF switch using a 
+\SI{2}{\mega\hertz} intermediate frequency signal. Therefore the result 
+is a frequency shift of the television signal by 2 MHz, when
+transmitting a bit 1, and no shift for a 0.  Hence,  we 
+leverage amplitude modulation at receiver in our design.
 binary amplitude shift keying is the implemented modulation technique.   
  
 \subsection{Receiver}
