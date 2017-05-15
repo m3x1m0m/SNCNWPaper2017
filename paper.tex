@@ -68,6 +68,25 @@ Christian Rohner\IEEEauthorrefmark{1} and Thiemo Voigt\IEEEauthorrefmark{2}}
 In this section we introduce some necessary background related to our
 work. 
 
+\subsection{Quadrature Demodulation}
+
+Quadrature demodulation is the major feature of the \textit{RTL2832U},  which makes it possible to decode a digitally amplitude- and phase-shifted signal. The received signal (behind the tuner at the input of the \textit{RTL2832U}) can be interpreted as
+\begin{equation}
+	s_{\text{RF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
+\end{equation}     
+This is multiplied with a cosine of the carrier frequency from a local oscillator.
+\begin{multline}
+        s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
+\end{multline}
+With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos(b)=sin(a+b)+sin(a-b)} follows
+\begin{multline}
+        2 \cdot s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
+\end{multline}
+One can see, that the interesting in-phase part (I) in this case is
+represented by a DC value after mixing. With a low-pass filter this DC
+value can be separated from the undesired rest. An analogous procedure
+is done with the quadrature part (Q) when mixing with a sine.
+
 \subsection{Backscatter Transmissions}
 \input{backscatter}
 
@@ -101,24 +120,6 @@ R820T/2} which offers a tuning range from 42 to 1002
 MHz~\cite{rafael_r820t_2011}. Figure \ref{fig:rtl_hw}, shows a
 photograph of the RTL-SDR used in our work. 
 
-\subsection{Quadrature Demodulation}
-
-Quadrature demodulation is the major feature of the \textit{RTL2832U},  which makes it possible to decode a digitally amplitude- and phase-shifted signal. The received signal (behind the tuner at the input of the \textit{RTL2832U}) can be interpreted as
-\begin{equation}
-	s_{\text{RF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
-\end{equation}     
-This is multiplied with a cosine of the carrier frequency from a local oscillator.
-\begin{multline}
-        s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
-\end{multline}
-With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos(b)=sin(a+b)+sin(a-b)} follows
-\begin{multline}
-        2 \cdot s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
-\end{multline}
-One can see, that the interesting in-phase part (I) in this case is
-represented by a DC value after mixing. With a low-pass filter this DC
-value can be separated from the undesired rest. An analogous procedure
-is done with the quadrature part (Q) when mixing with a sine.
 
 \section{Design}
 In this section, we describe the design 
@@ -220,7 +221,7 @@ An example of a recorded data stream with 25 kS/s can be seen in Figure
 
 \includegraphics[width=\columnwidth]{./fig/transmission}
 \vspace{-30mm}
-\caption{Data from the Octave oscilloscope showing the start of a transmission of 101010.. with 1 kbit/s with idle state before. The amplitude is quite low with an average of 12 \% of the maximum, which is 127.5. This is due to a low signal strength. Sampling frequency is 25 kHz. At the top one can see the raw signal from the ADC, in the middle the filtered signal and at the bottom the signal after the Schmitt trigger.}
+	\caption{\emph{Plots from Octave oscilloscope showing the start of a transmission of 101010..} In the top plot one can see the raw analog signal, in the middle plot the filtered signal and finally at the bottom the signal after processing though the Schmitt trigger. The amplitude is quite low with an average of 12 \% of the maximum, which is 127.5 due to a low signal strength. Sampling frequency is 25 kHz. }
 \label{fig:transmission}
 \vspace{-6mm}
 \end{figure}
