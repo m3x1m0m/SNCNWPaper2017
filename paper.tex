@@ -125,15 +125,15 @@ photograph of the RTL-SDR used in our work.
 
 The received signal can be interpreted as
 \begin{equation}
-	s_{\text{IF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
+	s_{\text{RF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
 \end{equation}     
 This is multiplied with a cosine of the carrier frequency from a local oscillator.
 \begin{multline}
-        s_{\text{IF}}(t) \cdot s_{\text{L}}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
+        s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
 \end{multline}
 With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos(b)=sin(a+b)+sin(a-b)} follows
 \begin{multline}
-        2 \cdot s_{\text{IF}}(t) \cdot s_{\text{L}}(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
+        2 \cdot s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
 \end{multline}
 One can see, that the interesting in-phase part (I) in this case is
 represented by a DC value after mixing. With a low-pass filter this DC
@@ -208,7 +208,7 @@ The raw I/Q data is available as two 8-bit values (real and imaginary) from the
 RTL-SDR. With these two values, the phase and magnitude of the data can be
 determined for every sample. The received signal can be represented as:
 \begin{equation}
-	I+j\,Q = abs(I,Q) \cdot e^{j \times ang(I,Q)} 
+	I+j\,Q = abs(I,Q) \cdot e^{j \cdot ang(I,Q)} 
 \end{equation}  
 So the first block, entitled RTL2832U, provides the interface to the TV
 dongle. It controls the frequency \ensuremath{f_{tuned}}, where the
