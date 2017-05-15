@@ -83,15 +83,15 @@ work.
 				\label{fig:rtl_hw}
 \end{figure}
 The \textit{Realtek RTL2832U} is a terrestrial digital video broadcast
-(DVB-T) demodulator IC, which is the main part of a wide range of
+(DVB-T) demodulator IC, which is the main component in a wide range of
 USB-based DVB-T receiver dongles. One prominent feature of this chip is
 that it allows to retrieve the raw I/Q samples via USB. This is
 originally intended for the chip to work as a simple DAB/FM software
 receiver. Ham radio enthusiasts have combined their efforts to create a
-software driver (the \textit{librtlsdr}, cf. \cite{steve-m_librtlsdr})
+software driver (the \textit{librtlsdr}~\cite{steve-m_librtlsdr})
 that allows DVB-T dongles based on the \textit{RTL2832} to be converted
-into low-cost wideband SDR receivers. The cost of traditional SDRs has
-been in the range of a few hundred to thousands of USD. Albeit much less
+into low-cost wideband SDR receivers. The cost of traditional SDRs is
+in the range of a few hundred to thousands of USD. Albeit much less
 powerful than a typical SDR, a \textit{RTL2832U}-based DVB-T receiver
 can be bought with antenna for less than 10 USD.  
 
@@ -149,7 +149,7 @@ RF switch. The RF switch enables us to alternate the impedance connected to
 the antenna between matched (50 \ensuremath{\Omega}) and open state.
 We control the RF switch through an I/O pin on a low-powered MCU, Texas
 instruments MSP430. As discussed earlier, to reduce the effects of
-self-interference, we frequency shift the backscatter transmission
+self-interference, we frequency-shift the backscatter transmission
 away from the TV signal. Hence, we operate the RF switch using a 
 \SI{2}{\mega\hertz} intermediate frequency signal. Therefore the result 
 is a frequency shift of the television signal by 2 MHz, when
@@ -209,11 +209,11 @@ The resulting values are sent through the bus to the decoder. After the decoder
 received the samples it decides when a frame is sent or when the channel is
 idle. The decoder also includes a function to correlate the received bitstream
 with an expected pattern. Hence it is able to determine the bit error ratio
-(BER). Furthermore the code we have written so far subsumes different
-simulators for e.g. playing back recorded data. Another handy utility, which
-has been written in Octave, is a tool (an oscilloscope) to look at the data,
-which is written into files by the demodulator. An example of a recorded data
-stream with 25 kS/s can be seen in Figure \ref{fig:transmission}.  
+(BER). Furthermore we have implemented a series of aditional tools that include
+different simulators for e.g. playing back recorded data and a tool (an
+oscilloscope) to plot the data, which is written into files by the demodulator.
+An example of a recorded data stream with 25 kS/s can be seen in Figure
+\ref{fig:transmission}.  
 
 
 \begin{figure}[h]
@@ -242,13 +242,14 @@ different filters in the demodulator chain. Finally  errors can be
 further reduced by using one of many available forward error correcting
 codes.
 
-To come to a conclusion one can say, that we were able to show, that
-spectrum scanning over a huge band with sweeping is possible using the
+%To come to a conclusion one can say, that 
+We have shown, that
+spectrum scanning over a wide band with sweeping is possible using the
 \textit{RTL-SDR}.  This allowed us to perform a survey of the TV signal
-strength in the city. And finally we have shown for the first time, that
-backscatter communication is possible with the \textit{RTL-SDR}.
-
-
+strength in the city. We found that the signal strength around most of the city
+is adequate for backscatter communication using our receiver. And finally we
+have shown for the first time, that backscatter communication is possible with
+the \textit{RTL-SDR}.
 
 \bibliographystyle{abbrv}
 \bibliography{paper}
@@ -257,4 +258,3 @@ backscatter communication is possible with the \textit{RTL-SDR}.
 
 
 
- 

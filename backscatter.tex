@@ -1,14 +1,14 @@
 Consider an unmodulated carrier wave impinging on a backscatter tag's
-antenna. The signal observed by the receiver is:
-\begin{equation}
+antenna. In the presense of an umodulated carrier. The signal observed
+by the receiver is: \begin{equation}
 				S_r(t) = S_{rc}(t) + \sigma B(t)S_{bc}(t)
 				\label{eq:signals}
 \end{equation}
 where $S_{rc}(t)$ is the signal coming directly from the carrier
 generator and $S_{bc}(t)$ is the signal from the carrier generator that
-reaches the backscatter tag. $B(t)$ is either zero or one and represents
-the instantaneous state of the backscatter tag: absorbing or reflecting,
-respectively.
+reaches the backscatter tag. $\sigma$ is the tag's radar cross section
+and $B(t)$ is either zero or one and represents the instantaneous state
+of the backscatter tag: absorbing or reflecting, respectively.
 
 Equation~(\ref{eq:signals}) reveals an important issue for backscatter
 communication systems: self-interference. The carrier signal $S_{rc}(t)$
@@ -17,7 +17,8 @@ $\sigma B(t)S_{bc}(t)$.
 
 Recent work on generating backscatter transmissions has avoided
 self-interference through \textit{frequency-shifted}
-backscatter~\cite{kellogg_passive_2016,wang_fm_2017,varshney2016lorea}.
+backscatter~\cite{kellogg_passive_2016,wang_fm_2017,varshney2016lorea,
+iyer2016inter}.
 The tags modulate their antenna in such a way that their transmissions
 occur at a certain frequency offset from the carrier signal thus
 allowing the receiver to avoid interference from the carrier by tuning

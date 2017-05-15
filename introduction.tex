@@ -1,9 +1,9 @@
 Backscatter communication enables wireless transmissions
-at energy consumption which is several orders of magnitude
+at an energy consumption several orders of magnitude
 lower than traditional radios. Backscatter achieves ultra-low
 power wireless transmissions by reflecting or absorbing ambient
-wireless signals, which as an operation consumes only 
-\SI{}{\micro\watt}s of power consumption~\cite{liu_ambient_2013}. 
+wireless signals, which consumes only 
+\SI{}{\micro\watt}s of power~\cite{liu_ambient_2013}. 
 As a consequence backscatter
 communication is emerging as the mechanism of choice to network
 devices operating on harvested energy.  
@@ -11,27 +11,28 @@ Over the past few years there has been significant progress
 to make backscatter a viable mechanism to network Internet of
 Things~(IoT) devices. Traditional backscatter systems, like RFID readers, required a
 dedicated device to generate the necessary carrier signal
-reflected by the tags. On the other hand, state-of-the art systems 
-does away the need for a dedicated device to generate carrier signals. 
-Recent backscatter systems leverage already deployed infrastructure of
-devices to generate carrier signal~\cite{varshney2016lorea,iyer2016inter}, or ambient WiFi~\cite{hitchhike,kellogg2015wi} or TV
-signals~\cite{liu_ambient_2013,parks_turbocharging_2014}.
+reflected by the tags. On the other hand, state-of-the art systems does away
+with the need for a dedicated device to generate carrier signals.  Recent
+backscatter systems leverage the already deployed infrastructure such as
+WiFi~\cite{hitchhike,kellogg2015wi} or TV
+towers~\cite{liu_ambient_2013,parks_turbocharging_2014} to generate the carrier
+signal. %~\cite{varshney2016lorea,iyer2016inter}, or ambient WiFi.
 
-Recent backscatter systems demonstrate ability to leverage
-existing signals like TV signals as a both source of carrier and energy. For
+Recent backscatter systems demonstrate the ability to leverage
+existing signals, such as TV, as the source of both carrier and energy. For
 example, Liu et al. present a proof-of-concept system that reflects
 ambient TV signals and enables tag-to-tag communication up to almost a
 meter. Parks et al. further improve the communication range to several
 meters by using analog coding~\cite{parks_turbocharging_2014}. While
-these systems can enable many applications, these systems are severely restricted
+these systems can enable many applications, they are severely restricted
 to operate in the vicinity of television towers where ambient signal
 are sufficiently strong~(approx
-\SI{-30}{dBm}). This is primarily due to poor sensitivity levels of receivers
+\SI{-30}{dBm}). This is primarily due to the poor sensitivity of the receivers
 employed on these devices, which together with weak backscatter reflections 
 severely limits the operating range from the tower.
-On the other hand, TV signals are known to vary greatly in
+Furthermore, TV signals are known to vary greatly in
 strength~\cite{wang_fm_2017} both over space, and in time,  which further aggravates the
-problem of limited range of ambient backscatter systems.
+problem of the limited range of ambient backscatter systems.
 
 On the other hand, Software Defined Radios~(SDRs) are powerful devices, and also
 have significant processing abilities. These devices offer high
@@ -41,9 +42,9 @@ significantly improve the communication range, and also coverage
 area to receive ambient backscatter transmissions. 
 
 In this paper we explore the following questions: Can we leverage an
-SDR-based receiver to receive ambient backscatter transmissions ?, and, Does the  
-relatively high sensitivity of SDR receivers improve
-range and coverage of ambient backscatter systems? A positive answer to the above question would provide a
+SDR-based receiver to receive ambient backscatter transmissions?, and, Does the  
+relatively high sensitivity of SDR receivers improve the
+range and coverage of ambient backscatter systems? A positive answer to the above questions would provide a
 flexible and low-cost experimentation platform to the wider research community to explore ambient backscatter
 systems.
 
@@ -52,9 +53,9 @@ systems.
 \begin{itemize}
 		
 
-				\item We design the first system which leverages a  low-cost 
+				\item We design the first system that leverages a  low-cost 
 					  SDR to receive ambient-backscatter transmissions. 
-				\item  Using the system designed, we demonstrate ambient backscatter using TV signals
+				\item  We demonstrate ambient backscatter using TV signals
 					   to be feasible in wide parts of a city. The range represents a significant improvement
 					   over the state-of-the-art.
 				
