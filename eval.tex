@@ -1,6 +1,6 @@
 
 In this section, we present the results of evaluation of our system. As experimental 
-setup, we use RTLSDR together with a signal processing algorithm implemented
+setup, we use RTL-SDR together with a signal processing algorithm implemented
 in Octave. 
 
 \subsection{Spatial variation of ambient television signals}
@@ -22,14 +22,14 @@ in Octave.
 
 In this experiment, we investigate the variation of the television signal
 in space, i.e., how does the strength of the signal varies over 
-the area of the city. We use the RTLSDR reader to obsevre the signal strength.
+the area of the city. We use the RTL-SDR reader to obsevre the signal strength.
 We perform the frequency sweep of the desired television band. Next, we
 obtain the sample in the time domain, and convert them to corresponding
 samples in frequency domain by performing fast-fourier transformation~(FFT).
 
 As we are not interested in realtime visualisation of the television
 signals, we acquire the signals offline and visualise the samples.
-RTLSDR dongle has a maximum sampling rate of 2.4 MS/s, which limits us to
+RTL-SDR has a maximum sampling rate of 2.4 MS/s, which limits us to
 scanning a band of \SI{1.2}{\mega\hertz} band in a single run. We  keep some safety-margin, and
 sample the desired band at \SI{900}{\kilo\hertz} intervals. We sample the band 
 \SI{20}{\mega\hertz} wide, by stitching individual bands. In our experiments, it takes roughly 30
