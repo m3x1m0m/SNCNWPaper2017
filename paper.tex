@@ -103,7 +103,7 @@ photograph of the RTL-SDR used in our work.
 
 \subsection{Quadrature Demodulation}
 
-The received signal can be interpreted as
+Quadrature demodulation is the major feature of the \textit{RTL2832U},  which makes it possible to decode a digitally amplitude- and phase-shifted signal. The received signal (behind the tuner at the input of the \textit{RTL2832U}) can be interpreted as
 \begin{equation}
 	s_{\text{RF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
 \end{equation}     
@@ -137,10 +137,9 @@ the antennas are known to be  frequency selective. To this end, we design an
 antenna on an unetched board made of FR4 substrate commonly
 used to design PCBs. The board acts like the ground plane, at the center
 of the board we have a wire acting as a monopole antenna element. 
-We have verified using a vector network analyzer (VNA), that the antenna
-can operate from frequency range most commonly
-used for television broadcast, 
-from \SI{245}{\mega\hertz} to \SI{626}{\mega\hertz}.
+The antenna has a quite good reflection coefficient \ensuremath{S_{11}} 
+of -17 dB at 626 MHz, which is the frequency aimed for. This means, that at 
+this frequency the antenna absorber more energy form the electromagnetic field compared to another band. A vector network analyzer (VNA) has been used to analyze antenna performance.
 
 Backscatter operates by reflecting or absorbing impinging
 radio signals on the antenna. To purposefully toggle the antenna
