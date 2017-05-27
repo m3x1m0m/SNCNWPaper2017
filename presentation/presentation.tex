@@ -3,6 +3,7 @@
 % For PDFs
 \newcommand{\myast}{\ensuremath{^{\ast}}}
 \newcommand{\mydagger}{\ensuremath{^{\dagger}}}
+\usepackage[utf8x]{inputenc}
 \usepackage{pdfpages}
 \usepackage{minted}
 \usepackage{siunitx}
@@ -12,6 +13,7 @@ Using a Low-Cost Software Defined Radio}
 \date{\vspace{1em}
 \today}
 \author{Maximilian Stiefel\myast, Elmar van Rijnswou\myast\\Carlos Pérez-Penichet\myast, Ambuj Varshney\myast, Christian Rohner\myast and Thiemo Voigt \mydagger
+\vspace{1em}
 \\\myast Uppsala University
 \\\mydagger Uppsala University and RISE SICS
 }
@@ -19,45 +21,76 @@ Using a Low-Cost Software Defined Radio}
 \begin{document}
   \maketitle
 
-\begin{frame}{Table Of Contents}
-  \setbeamertemplate{section in toc}[sections numbered]
-  \tableofcontents[hideallsubsections]
+\begin{frame}{Contributions}
+	\begin{itemize}
+		\item<1-> First system using the RTL-SDR to receive ambient backscatter
+		\item<2-> Showing that ambient backscatter using TV signals to be feasible in wider parts of the city \only<3->{\ensuremath{\rightarrow} Significant improvement of the state-of-the-art, which is restricted to a TV towers proximity}
+	\end{itemize}
 \end{frame}
 
 \section{Introduction}
+
 \begin{frame}{What is Backscattering? (1)}
 	\begin{figure}[H]	
 		\centering
-		\only<1>{\includegraphics[width=0.8\textwidth]{./fig/backscatter1}}
-		\only<2>{\includegraphics[width=0.8\textwidth]{./fig/backscatter2}}
-		\caption{Simplest form of backscattering.}
+		\only<1>{\includegraphics[width=0.7\textwidth]{./fig/backscatter_simpler}}
+		\only<2->{\includegraphics[width=0.7\textwidth]{./fig/backscatter_simple}}
+
+		\caption{Simplest form of backscattering. Simplex with two subscribers.}
 	\end{figure}
+	\metroset{block=fill}
+	\only<3>{\begin{block}{Backscattering}
+		Communication technique similar to passive RFID, but the transmitter has to maintain its signal. 
+	\end{block}}
 \end{frame}
 
 \begin{frame}{What is Backscattering? (2)}
-	\only<1->{\begin{figure}[H]	
-		\centering
-		\includegraphics[width=0.6\textwidth]{./fig/mixer}
-		\caption{Classical communications engineering element: The mixer.}
-	\end{figure}}
-	\only<2->{\begin{equation}
-	2\sin(f_c t) \sin(\Delta f t) = \cos[(f_c + \Delta f)t] - \cos[(f_c - \Delta f) t]
-	\label{eq:mixing}
-	\end{equation}}
-
-\end{frame}
-
-\begin{frame}{What is Backscattering? (3)}
-	\only<1->{\begin{figure}[H]	
+\begin{minipage}{0.45\textwidth}
+	\begin{figure}[H]	
 		\centering
 		\includegraphics[height=0.5\textheight]{./fig/rfswitch}
 		\caption{\SI{50}{\ohm} connected to a RF switch do the trick.}
+	\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+	\only<2->{\begin{equation}
+		P_R = P_A \cdot (1-\Gamma^2)
+	\end{equation}}
+	\only<3->{\begin{equation}
+		\Gamma = \frac{Z_L - Z_A}{Z_L + Z_A}
+	\end{equation}}
+	\only<4->{Total reflection: 
+	\begin{equation*}
+		\lim_{Z_L \to \infty} \Gamma = \frac{Z_L - Z_A}{Z_L + Z_A} = 1
+	\end{equation*}}
+	\only<5->{Total absorption: 
+	\begin{equation*}
+		\lim_{Z_L \to \SI{50}{\ohm}} \Gamma = \frac{Z_L - Z_A}{Z_L + Z_A} = 0
+	\end{equation*}}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Frequency Shift Keying With Backscatter Tags (1)}
+	\begin{figure}[H]	
+		\centering
+		\only<1>{\includegraphics[width=0.8\textwidth]{./fig/backscatter}}
+		\caption{Frequency shift keying modulation techniques are enabled by switching with a higher frequency.}
+	\end{figure}
+	\metroset{block=fill}
+\end{frame}
+
+\begin{frame}{Frequency Shift Keying With Backscatter Tags (2)}
+	\only<1->{\begin{figure}[H]	
+		\centering
+		\includegraphics[width=0.5\textwidth]{./fig/mixer}
+		\caption{Classical communications engineering element: The mixer.}
 	\end{figure}}
-	\only<2->{
-		\begin{equation}
-			\Gamma = \frac{Z_L - Z_A}{Z_L + Z_A}
-		\end{equation}
-	}
+	\only<2->{\begin{equation}
+	2\sin(\omega_0 t) \sin(\omega_B) = \cos[(\omega_0 + \omega_B)t] - \cos[(\omega_0 - \omega_B) t]
+	\label{eq:mixing}
+	\end{equation}}
+
 \end{frame}
 
 \begin{frame}{Why Backscattering?}
@@ -65,78 +98,31 @@ Using a Low-Cost Software Defined Radio}
 		\item<1-> Ultra-low power wireless transmissions by reflecting/absorbing EM waves (in orders of \SI{}{\micro\watt}) \cite{liu_ambient_2013}
 		\item<2-> Leverage existing signals such as coming from WiFi \cite{hitchhike,kellogg2015wi} or TV towers \cite{liu_ambient_2013,parks_turbocharging_2014}
 		\item<3-> Mechanism of choice to network devices operating on harvested energy
-		\item<4-> Communication frontends are much simpler, smaller and cheaper, than traditional RF frontends
+		\item<4-> Communication frontends much simpler, smaller and cheaper, in comp. with traditional RF frontends
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Contributions}
+\begin{frame}{TV Signal Backscattering Application Example}
+\begin{minipage}{0.45\textwidth}
+	\begin{figure}[H]	
+		\centering
+		\includegraphics[height=0.5\textheight]{./fig/elmars_home}
+		\caption{Houses in Amsterdam. Source: reddit.com}
+	\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
 	\begin{itemize}
-		\item<1-> We designed the first system using the RTL-SDR to receive ambient-backscatter.
-		\item<2-> We demonstrate ambient backscatter using TV signals to be feasible in wider parts of the city, which is a significant improvement since the state-of-the-art is restricted to a TV towers proximity. 
+		\item<1-> Houses in the Netherlands are constantly sinking
+		\item<2-> Backscattering tags on the roofs next to the TV antenna
+		\item<3-> Sensor network with node which are highly-energy constrained
 	\end{itemize}
+\end{minipage}
 \end{frame}
 
-\section{Background}
-\begin{frame}{RTL-SDR Hardware and I/Q Demodulation (1)}
-	\begin{figure}[H]	
-		\centering
-		\only<1>{\includegraphics[width=0.7\textwidth]{./fig/rtlsdr}}
-		\only<2>{\includegraphics[width=0.7\textwidth]{./fig/rtlsdr1}}
-		\only<3>{\includegraphics[width=0.7\textwidth]{./fig/rtlsdr2}}
-		\caption{RTL-SDR hardware with the DVB-T I/Q demodulator
-		Raeltek RTL2832U (left IC) and the tuner with integrated LNA
-		Rafael Micro R820T/2 (right IC).}
-	\end{figure}
-\end{frame}
 
-\begin{frame}{RTL-SDR Hardware and I/Q Demodulation (2)}
-	\only<1->{Impinging signal: 
-	\begin{equation}
-		s_{\text{RF}}(t)=I(t) \cdot cos(\omega_{0}t) + Q(t) \cdot sin(\omega_{0}t)
-	\end{equation}}
-	\only<2->{Mixing with local RF frequency:
-	\begin{multline}
-		s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot cos(\omega_{0}t) \cdot cos(\omega_{0}t)\\+ Q(t) \cdot sin(\omega_{0}t) \cdot cos(\omega_{0}t)
-	\end{multline}}
-	\only<3->{With \ensuremath{2\,cos(a)cos(b)=cos(a-b)+cos(a+b)} and \ensuremath{2\,sin(a)cos(b)=sin(a+b)+sin(a-b)} follows
-	\begin{multline}
-		        2 \cdot s_{\text{RF}}(t) \cdot s_{\text{LO}}(t) = I(t) \cdot \bigl[1+cos(2\omega_{0}t)\bigr]\\+ Q(t) \cdot \bigl[sin(2\omega_0t)+sin(0)\bigr].
-	\end{multline}}
+\section{Looking for TV Signals in Uppsala}
 
-\end{frame}
-
-\section{Design}
-\begin{frame}{Transmitter}
-	\only<1->{\begin{figure}[H]	
-		\centering
-		\includegraphics[width=0.7\textwidth]{./fig/transmitter}
-		\caption{Transmitter architecture. The ground plane antenna is roughly tuned to the center frequency of the TV signal, which is \SI{626}{\mega\Hz}. A microcontroller steers a RF switch with a rectangular signal to shift the TV wave in another band.}
-	\end{figure}}
-\end{frame}
-
-\begin{frame}{Receiver (1)}
-	\begin{figure}[H]	
-		\centering
-		\only<1>{\includegraphics[width=0.9\textwidth]{./fig/receiver1}}
-		\only<2>{\includegraphics[width=0.9\textwidth]{./fig/receiver2}}
-		\caption{Design of the ambient backscatter receiver. The flow
-		of operation of the receiver is from the left to right. Code is publicly available under \cite{s3xm3x_backscatterBASKReceiver}.}
-	\end{figure}
-\end{frame}
-
-\begin{frame}{Receiver (2)}
-	\only<1->{The received signal can be interpreted as:
-	\begin{equation}
-		        I+j\,Q = abs(I,Q) \cdot e^{j \cdot ang(I,Q)} 
-	\end{equation}}
-	\only<2->{
-	Rectification:
-	\begin{equation}
-		abs(I,Q) = \sqrt{I^2 +  Q^2}
-	\end{equation}}
-\end{frame}
-
-\section{Evaluation}
 \begin{frame}{Spatial Variation of Ambient TV Signals (1)}
 \begin{figure}[h]
 	\centering
@@ -147,24 +133,12 @@ Using a Low-Cost Software Defined Radio}
 	\begin{minipage}{0.49\columnwidth}
 		\includegraphics[width=\columnwidth]{./fig/626mhz_filtered}
 	\end{minipage}
-	\caption{\emph{Observed spectrum of television signal}. The left hand image shows the raw spectrum of the TV signal, with centre frequency of \SI{626}{\mega\hertz}. The right hand image shows the smoothed spectrum normalized to maximum average. The average is  shown by the horizontal red line.}
+	\caption{Single measurement at one point in space. Left: Raw spectrum. Right: Spectrum where average power had been determined.}
 	\label{fig:tv_record} 
 	\end{figure}
 \end{frame}
 
 \begin{frame}{Spatial Variation of Ambient TV Signals (2)}
-	Perform FFT and stick bands together.
-	\begin{equation}
-		|H| = \Biggl| \sum_{n=0}^N FFT\biggl( \Re\{ s_{\text{band,n}}(t) \} \biggr) \Biggr|
-	\end{equation}
-	Smoothing and signal strength calculation. 
-	\begin{equation}
-		|H_{\text{tv,avg}}| = 20 \cdot log (|H|) - 20 \cdot log(|H_0|)
-	\end{equation}
-	This has been done with Octave \cite{s3xm3x_RTLSDRSpecAn}.
-\end{frame}
-
-\begin{frame}{Spatial Variation of Ambient TV Signals (3)}
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{0.49\columnwidth}
@@ -174,16 +148,93 @@ Using a Low-Cost Software Defined Radio}
 	\begin{minipage}{0.49\columnwidth}
 		\includegraphics[width=\columnwidth]{./fig/heatmap_626mhz}
 	\end{minipage}
-	\caption{\emph{Spatial variation of TV signals in Uppsala city}. The left image demonstrates the signal strength of TV signal fading as opposed to observed signal strength near the TV tower. The right image visualises the signal strength as heatmap for the signal present in the \SI{626}{\mega\hertz} band. Distances have been calculated with the Haversine formula. }
+	\caption{Multiple measuremnets in space. Left: Signal attenuation vs. distance from TV tower. Right: Interpolated heatmap for the \SI{626}{\mega\Hz}.}
 	\label{fig:haversine}
 \end{figure}
 \end{frame}
 
+
+\begin{frame}{Backscattering a Local Signal}
+	\begin{figure}[H]	
+		\centering
+		\only<1>{\includegraphics[width=0.7\textwidth]{./fig/626mhz_raw.png}}
+			\only<2>{\includegraphics[width=0.7\textwidth]{./fig/626mhz_raw_arrow.png}}	
+		\caption{Spectrum of a local TV signal. Center frequency is \SI{626}{\mega\Hz}.}
+	\end{figure}	
+\end{frame}
+
+\section{Communication System Design}
+
+\begin{frame}{Transmitter (1)}
+	\only<1>{\begin{figure}[H]	
+		\centering
+		\includegraphics[width=0.7\textwidth]{./fig/backscatter}
+	\end{figure}}
+	
+	\only<2>{\begin{figure}[H]	
+		\centering
+		\includegraphics[width=0.7\textwidth]{./fig/backscatter_simple_bob}
+	\end{figure}}
+\end{frame}
+
+\begin{frame}{Transmitter (2)}
+	\begin{figure}[H]	
+		\centering
+		\includegraphics[width=0.7\textwidth]{./fig/transmitter}
+		\caption{Transmitter architecture. Ground plane antenna roughly tuned to TV signal center freq. (\SI{626}{\mega\Hz}). Microcontroller steers a RF switch with a rectangular signal shifting the TV wave in another band.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Receiver (1)}	
+	\only<1>{\begin{figure}[H]	
+		\centering
+		\includegraphics[width=0.7\textwidth]{./fig/backscatter}
+	\end{figure}}
+	
+	\only<2>{\begin{figure}[H]	
+		\centering
+		\includegraphics[width=0.7\textwidth]{./fig/backscatter_simple_alice}
+	\end{figure}}
+\end{frame}
+
+\begin{frame}{Receiver (2)}
+
+\begin{minipage}{0.45\textwidth}
+	\begin{figure}[H]	
+		\centering
+		\only<1>{\includegraphics[width=0.8\textwidth]{./fig/rtlsdr}}
+		\only<2,3>{\includegraphics[width=0.8\textwidth]{./fig/rtlsdr1}}
+		\only<4>{\includegraphics[width=0.8\textwidth]{./fig/rtlsdr2}}
+		\caption{RTL-SDR hardware with the DVB-T I/Q demodulator
+		Raeltek RTL2832U (left IC) and the tuner with integrated LNA
+		Rafael Micro R820T/2 (right IC).}
+	\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+	\begin{itemize}
+		\item<2-> RTL2832U is cheap  
+		\item<3-> Access to I/Q demodulator (DAB and FM radio) can be hacked		\item<4-> Tuner (LNA, filters etc.) included
+	\end{itemize}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Receiver (3)}
+	\begin{figure}[H]	
+		\centering
+		\only<1>{\includegraphics[width=0.9\textwidth]{./fig/receiver1}}
+		\only<2>{\includegraphics[width=0.9\textwidth]{./fig/receiver2}}
+		\caption{Architecture of backscatter receiver.}
+	\end{figure}
+\end{frame}
+
+\section{Results and Outlook}
+
 \begin{frame}{Communication Performance (1)}
 	\begin{figure}[h]
 	\centering
-	\includegraphics[width=0.5\textwidth]{./fig/transmission}
-	\caption{\emph{Plots from Octave oscilloscope showing the start of a transmission of 101010..} In the top plot one can see the raw analog signal, in the middle plot the filtered signal and finally at the bottom the signal after processing though the Schmitt trigger. The amplitude is quite low with an average of 12 \% of the maximum, which is 127.5 due to a low signal strength. Sampling frequency is 25 kHz. }
+	\includegraphics[width=0.7\textwidth]{./fig/transmission}
+	\caption{Start of a transmission. Different signal processing steps are visible. First: Raw downsampled signal amplitude. Second: Signal after low-pass filter. Third: Signal after Schmitt trigger.}
 	\label{fig:transmission}	
 \end{figure}
 \end{frame}
@@ -192,57 +243,37 @@ Using a Low-Cost Software Defined Radio}
 	\begin{itemize}
 		\item<1-> We varied the bitrate between 1 bit/s and 1 kbit/s 
 		\item<2-> Strength of the backscattered signal is quite low (high quantisation noise)
-		\item<3-> Higher bitrates (1 kbit/s) lead to a range of a couple of decimeter before the bitrate goes up rapidly (40 \%)
-		\item<4-> We acknowledge the high bit errors observed due to primarily limited gain available on the low cost dongles
-	\end{itemize}
-\end{frame}
-
-\section{Discussion}
-
-\begin{frame}{Discussion}
-	\begin{itemize}
-		\item<1-> Our system has a lot of space for improvement
-		\item<2-> Other antennas for reception and transmission have to be tried out
-		\item<3-> The standard cable and the antenna of the RTL-SDR (included in the 10 USD budget) are unsuiteable for our application as we realized
-		\item<4-> The filters involved are setscrews as well as the coding used by the communication system (currently none)
+		\item<3-> Higher bitrates (1 kbit/s) lead to a range of a couple of decimeter before the error rate goes up rapidly
+		\item<4-> High bit error rate is due to the not yet customized HW
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Results}
 	\begin{itemize}
-		\item<1-> We showed thath spectrum scanning over a huge band is possible using the RTL-SDR.
-		\item<2-> We found by carrying out a TV signal strength survey that the city is adequate for backscatter communication using our receiver.
-		\item<3-> We have shown for the first time, that backscatter communication is possible with the RTL-SDR.
+		\item<1-> Spectrum scanning over a huge band is possible using the RTL-SDR
+		\item<2-> Uppsala is adequate for backscatter communication using our receiver
+		\item<3-> Backscatter communication is possible with the RTL-SDR
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Contact Information}
-        	\begin{center}
-                \begin{table}[]
-                        \begin{tabular}{ll}
-                                E: & Elmar.Vanrijnswou.9818@student.uu.se \\
-                             	E: & Maximilian.Stiefel.8233@student.uu.se\\
-            				& \\
-			\includegraphics[width=0.05\textwidth]{./fig/github} & \url{https://github.com/elamre}\\ 
-	& \url{https://github.com/m3x1m0m}
-		
-		\end{tabular}
-                \end{table}
+\begin{frame}{Outlook}
+	\begin{itemize}
+		\item<1-> Other antennas for reception and transmission have to be tried out
+		\item<2-> Standard cable and antenna of the RTL-SDR (included in the 10 USD budget) are unsuiteable for our application as we realized
+		\item<3-> The filters involved are setscrews as well as the coding used by the communication system
+	\end{itemize}
+\end{frame}
 
-        	\end{center}
-        	\begin{figure}
-                	\includegraphics[width=0.3\textwidth]{./fig/logo}
-        	\end{figure}
-  	\end{frame}
+
 
 \begin{frame}[standout]
-	Happy Coding :) 
+	Thank you for your attention. 
 \end{frame}
 
 \begin{frame}[allowframebreaks]{References}
 
   \bibliography{presentation}
-  \bibliographystyle{ieeetr}
+  \bibliographystyle{apalike}
 
 \end{frame}
 
