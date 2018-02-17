@@ -1,8 +1,8 @@
 # Enabling Ambient Backscatter Using a Low-Cost Software Defined Radio
 
-![Receiver Architecture](/fig/receiver_arch.png)
+! [Receiver Architecture](./paper/fig/receiver_arch.png)
 
-[Paper](https://github.com/m3x1m0m/SNCNWPaper2017/paper/paper.pdf) about television signal backscattering using the RTL2832 as a receiver
+[Paper](https://github.com/m3x1m0m/SNCNWPaper2017/blob/master/paper/paper.pdf) about television signal backscattering using the RTL2832 as a receiver
 prepared for the Swedish National Computer Networking Workshop.
 
 ## Abstract 
