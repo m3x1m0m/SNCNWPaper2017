@@ -21,3 +21,7 @@ ambient backscatter communication from low-power tags. Our
 measurements show that the TV signal is strong enough in most
 parts of a mid-sized Swedish city for our system to operate and
 communicate.
+
+## Authors
+
+Maximilian Stiefel, Elmar van Rijnswou, Carlos Pérez-Penichet, Ambuj Varshney, Christian Rohner and Thiemo Voigt
